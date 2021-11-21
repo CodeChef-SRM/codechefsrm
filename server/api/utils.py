@@ -1,4 +1,7 @@
+import time
+import os
 from typing import Callable
+from psutil import Process
 from .view import router as main_router
 from .limiter import limiter
 
@@ -19,3 +22,7 @@ def post_wrapper(path: str, status_code: int = 201, limit: str = "5/minute", **k
         return func
 
     return inner
+
+
+async def process_time():
+    return time.time() - Process(os.getpid()).create_time()

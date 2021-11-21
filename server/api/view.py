@@ -3,6 +3,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from .definitions import ContactUsSchema
 from server.models.transactions import get_team_data, insert_details
+from .utils import process_time
 
 router = APIRouter()
 
@@ -22,3 +23,9 @@ async def team(response: Response, page):
 async def contact_us(request: Request, data: ContactUsSchema):
     insert_details(data=data)
     return {"success": True}
+
+
+@router.get("/health-check", status_code=200)
+async def health_check():
+    uptime = await process_time()
+    return {"upTime": uptime}
