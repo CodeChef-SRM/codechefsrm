@@ -4,7 +4,6 @@ from server.api.view import router as api_view
 from server.api.exception_handlers import invalid_data_handler
 from server.api.limiter import limiter
 
-
 __version__ = "0.1.0"
 
 application = FastAPI()

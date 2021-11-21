@@ -19,6 +19,9 @@ click==8.0.3; python_version >= "3.6" and python_full_version >= "3.6.2" \
 colorama==0.4.4; python_version >= "3.6" and python_full_version >= "3.6.2" and platform_system == "Windows" \
     --hash=sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2 \
     --hash=sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b
+dnspython==2.1.0; python_version >= "3.6" \
+    --hash=sha256:95d12f6ef0317118d2a1a6fc49aac65ffec7eb8087474158f42f26a639135216 \
+    --hash=sha256:e4a87f0b573201a0f3727fa18a516b055fd1107e0e5477cded4a2de497df1dd4
 fastapi==0.70.0; python_full_version >= "3.6.1" \
     --hash=sha256:a36d5f2fad931aa3575c07a3472c784e81f3e664e3bb5c8b9c88d0ec1104f59c \
     --hash=sha256:66da43cfe5185ea1df99552acffd201f1832c6b364e0f4136c0a99f933466ced
@@ -171,6 +174,9 @@ pymongo==3.12.1 \
     --hash=sha256:979e34db4f3dc5710c18db437aaf282f691092b352e708cb2afd4df287698c76 \
     --hash=sha256:c04e84ccf590933a266180286d8b6a5fc844078a5d934432628301bd8b5f9ca7 \
     --hash=sha256:704879b6a54c45ad76cea7c6789c1ae7185050acea7afd15b58318fa1932ed45
+python-dotenv==0.19.2; python_version >= "3.5" \
+    --hash=sha256:a5de49a31e953b45ff2d2fd434bbc2670e8db5273606c1e737cc6b93eff3655f \
+    --hash=sha256:32b2bdc1873fd3a3c346da1c6db83d0053c3c62f28f1f38516070c4c8971b1d3
 redis==3.5.3; python_version >= "3.6" and python_full_version < "3.0.0" and python_version < "4.0" or python_version >= "3.6" and python_version < "4.0" and python_full_version >= "3.5.0" \
     --hash=sha256:432b788c4530cfe16d8d943a09d40ca6c16149727e4afe8c2c9d5580c59d9f24 \
     --hash=sha256:0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2
