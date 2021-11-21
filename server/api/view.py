@@ -3,6 +3,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from .definitions import ContactUsSchema
 from server.models.transactions import get_team_data
+from models.transactions import insert_details
 
 router = APIRouter()
 
@@ -20,4 +21,5 @@ async def team(response: Response, page):
 
 @post_wrapper(path="/contact-us", status_code=201, limit="3/minute")
 async def contact_us(request: Request, data: ContactUsSchema):
-    ...
+    insert_details(data=data)
+    return {"success": True}
