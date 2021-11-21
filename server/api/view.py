@@ -1,13 +1,10 @@
-from fastapi import APIRouter
+from server.models.transactions import get_team_data, insert_details
 from starlette.requests import Request
 from starlette.responses import Response
+
+from . import router
 from .definitions import ContactUsSchema
-from server.models.transactions import get_team_data, insert_details
-from .utils import process_time
-
-router = APIRouter()
-
-from .utils import post_wrapper
+from .utils import post_wrapper, process_time
 
 
 @router.get("/team", status_code=200)
