@@ -16,7 +16,9 @@ class Model:
         Returns:
             pymongo.cursor.Cursor: cursor object
         """
-        return self.db.Team.aggregate(pipeline=[{"$skip": skip}, {"$limit": limit}])
+        return self.db.Team.aggregate(
+            pipeline=[{"$skip": skip}, {"$limit": limit}, {"$project": {"_id": 0}}]
+        )
 
     def insert_contact_details(self, data):
         self.db.ContactUs.insert(data)
