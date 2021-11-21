@@ -3,7 +3,6 @@ from fastapi.exceptions import RequestValidationError
 from server.api.view import router as api_view
 from server.api.exception_handlers import invalid_data_handler
 from server.api.limiter import limiter
-from dotenv import load_dotenv
 
 __version__ = "0.1.0"
 
