@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "codechefsrm"
+version = "0.1.0"
+description = "Website for Code Chef SRM Chapter"
+authors = ["Aradhya <aradhyatripathi51@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.70.0"
+black = "^21.11b1"
+pymongo = "^3.12.1"
+uvicorn = "^0.15.0"
+slowapi = "^0.1.5"
+requests = "^2.26.0"
+python-dotenv = "^0.19.2"
+dnspython = "^2.1.0"
+
+[tool.poetry.dev-dependencies]
+requests = "^2.26.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
