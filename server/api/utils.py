@@ -3,9 +3,7 @@ from .view import router as main_router
 from .limiter import limiter
 
 
-def contact_us_wrapper(
-    path: str, status_code: int = 201, limit: str = "5/minute", **kwargs
-):
+def post_wrapper(path: str, status_code: int = 201, limit: str = "5/minute", **kwargs):
     """Wrapper function for simplifying router args and throttling
 
     Args:
