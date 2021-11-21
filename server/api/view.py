@@ -2,8 +2,7 @@ from fastapi import APIRouter
 from starlette.requests import Request
 from starlette.responses import Response
 from .definitions import ContactUsSchema
-from server.models.transactions import get_team_data
-from models.transactions import insert_details
+from server.models.transactions import get_team_data, insert_details
 
 router = APIRouter()
 
