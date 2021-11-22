@@ -6,10 +6,9 @@ import json
 
 def get_team_data(page, limit: int = 10):
     try:
-        page = int(page)
+        page = abs(int(page))
         assert page != 0, "page number can't be zero"
-
-    except ValueError or AssertionError as e:
+    except (ValueError, AssertionError) as e:
         return str(e)
 
     skip = (limit * page) - limit
