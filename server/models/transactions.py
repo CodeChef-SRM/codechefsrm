@@ -2,13 +2,14 @@ from pydantic.main import BaseModel
 from . import model
 from bson import json_util
 import json
-from typing import Dict
 
 
 def get_team_data(page, limit: int = 10):
     try:
         page = int(page)
-    except ValueError as e:
+        assert page != 0, "page number can't be zero"
+
+    except ValueError or AssertionError as e:
         return str(e)
 
     skip = (limit * page) - limit
