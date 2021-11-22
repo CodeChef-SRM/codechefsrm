@@ -1,5 +1,5 @@
 import unittest
-from tests import test_contact_us
+from tests import test_contact_us, test_about_us, test_team
 from importlib import import_module
 
 import argparse
@@ -13,6 +13,8 @@ def configure_options():
 
 def get_server_tests(suite):
     suite.addTest(unittest.makeSuite(test_contact_us.TestContactUs))
+    suite.addTest(unittest.makeSuite(test_about_us.TestAboutUs))
+    suite.addTest(unittest.makeSuite(test_team.TestTeamPage))
 
 
 def main():
