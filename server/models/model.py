@@ -6,7 +6,7 @@ class Model:
         _uri = mongo_uri
         self.db = pymongo.MongoClient(_uri)[database]
 
-    def get_team(self, skip: int, limit: int) -> pymongo.cursor.Cursor:
+    def team_data(self, skip: int, limit: int) -> pymongo.cursor.Cursor:
         """Get team details with pagination
 
         Args:
@@ -22,3 +22,6 @@ class Model:
 
     def insert_contact_details(self, data):
         self.db.ContactUs.insert(data)
+
+    def about_us(self):
+        return self.db.AboutUs.find({}, {"_id": 0})
