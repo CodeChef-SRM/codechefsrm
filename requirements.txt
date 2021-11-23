@@ -95,6 +95,9 @@ pydantic==1.8.2; python_full_version >= "3.6.1" \
     --hash=sha256:4be75bebf676a5f0f87937c6ddb061fa39cbea067240d98e298508c1bda6f3f3 \
     --hash=sha256:fec866a0b59f372b7e776f2d7308511784dace622e0992a0b59ea3ccee0ae833 \
     --hash=sha256:26464e57ccaafe72b7ad156fdaa4e9b9ef051f69e175dbbb463283000c05ab7b
+pyjwt==2.3.0; python_version >= "3.6" \
+    --hash=sha256:e0c4bb8d9f0af0c7f5b1ec4c5036309617d03d56932877f2f7a0beeb5318322f \
+    --hash=sha256:b888b4d56f06f6dcd777210c334e69c737be74755d3e5e9ee3fe67dc18a0ee41
 pymongo==3.12.1 \
     --hash=sha256:c4653830375ab019b86d218c749ad38908b74182b2863d09936aa8d7f990d30e \
     --hash=sha256:2462a68f6675da548e333fa299d8e9807e00f95a4d198cfe9194d7be69f40c9b \
