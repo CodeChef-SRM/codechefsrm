@@ -5,4 +5,4 @@ execution="\e[0;36m[INFO]\e[0m"
 
 echo -e "$execution server boot [...]"
 
-uvicorn server.main:application --reload &
+uvicorn server.__init__:application --reload &
