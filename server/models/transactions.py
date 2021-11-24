@@ -1,21 +1,17 @@
-from pydantic.main import BaseModel
-
-from server.models.errors import AdminDoesNotExistError
-from . import model
-from bson import json_util
 import json
-from typing import Dict
 from hashlib import sha256
+from typing import Dict
+
+from bson import json_util
+from pydantic.main import BaseModel
+from server.models.errors import AdminDoesNotExistError
+
+from . import model
+from .utils import pagination_helper
 
 
 async def get_team_data(page, limit: int = 10):
-    try:
-        page = abs(int(page))
-        assert page != 0, "page number can't be zero"
-    except (ValueError, AssertionError) as e:
-        return str(e)
-
-    skip = (limit * page) - limit
+    skip = pagination_helper(page, limit)
     return json.loads(json_util.dumps(model.team_data(skip=skip, limit=limit)))
 
 
@@ -26,6 +22,11 @@ async def insert_details(data: BaseModel):
 
 async def get_about_us():
     return json.loads(json_util.dumps(model.about_us()))
+
+
+async def get_events(page, limit: int = 10):
+    skip = pagination_helper(page, limit)
+    return json.loads(json_util.dumps(model.events_data(skip=skip, limit=limit)))
 
 
 async def insert_admin(data: Dict[str, str]):

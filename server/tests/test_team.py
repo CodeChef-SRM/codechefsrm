@@ -11,4 +11,4 @@ class TestTeamPage(CustomTestClass):
 
         response = self.client.get(self.base_url + "/api/team", params={"page": "0"})
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json().get("error"), "page number can't be zero")
+        self.assertEqual(response.json().get("detail"), "page number can't be zero")
