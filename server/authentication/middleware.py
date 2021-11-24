@@ -8,7 +8,9 @@ from .utils import get_token, validate_token_type
 
 
 async def verify_user(request: Request, call_next: Callable):
-    if "/api/admin" in str(request.url):
+    if "/api/admin" in str(request.url) and "/api/admin/register" not in str(
+        request.url
+    ):
         try:
             token_details = get_token(request.headers)
             token = validate_token_type(token_details, "Bearer")
