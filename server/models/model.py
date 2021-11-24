@@ -38,3 +38,8 @@ class Model:
         doc = self.db.Admin.find_one({"email": email})
         if doc:
             return doc
+
+    def events_data(self, skip, limit):
+        return self.db.Events.aggregate(
+            pipeline=[{"$skip": skip}, {"$limit": limit}, {"$project": {"_id": 0}}]
+        )

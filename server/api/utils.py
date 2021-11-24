@@ -5,8 +5,13 @@ from psutil import Process
 from .limiter import limiter
 
 
-def post_wrapper(
-    path: str, router, status_code: int = 201, limit: str = "5/minute", **kwargs
+def throttle_wrapper(
+    path: str,
+    router,
+    method: str = "post",
+    status_code: int = 201,
+    limit: str = "5/minute",
+    **kwargs
 ):
     """Wrapper function for simplifying router args and throttling
 
@@ -19,7 +24,7 @@ def post_wrapper(
         limit = "1000/minute"
 
     def inner(func: Callable):
-        func = router.post(path, status_code=status_code, **kwargs)(
+        func = getattr(router, method)(path, status_code=status_code, **kwargs)(
             limiter.limit(limit)(func)
         )
         return func
