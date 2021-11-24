@@ -4,13 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from server.api.view import open_router, admin_router
 from server.api.exception_handlers import (
     invalid_data_handler,
-    invalid_webhook_handler,
-    admin_exists_handler,
+    auth_error_handler,
+    data_error_handler,
 )
 from server.api.limiter import limiter
 from server.api.utils import process_time
-from server.api.errors import InvalidWebhookError
-from server.models.errors import AdminExists
+from server.errors.auth_errors import AuthenticationError
+from server.errors.data_error import DataErrors
 from server.authentication.middleware import verify_user
 from dotenv import load_dotenv
 
@@ -34,8 +34,8 @@ application.middleware("http")(verify_user)
 
 application.state.limiter = limiter
 application.exception_handler(RequestValidationError)(invalid_data_handler)
-application.exception_handler(InvalidWebhookError)(invalid_webhook_handler)
-application.exception_handler(AdminExists)(admin_exists_handler)
+application.exception_handler(AuthenticationError)(auth_error_handler)
+application.exception_handler(DataErrors)(data_error_handler)
 application.include_router(open_router, prefix="/api")
 application.include_router(admin_router, prefix="/api/admin")
 
