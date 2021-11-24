@@ -1,10 +1,10 @@
 from typing import Dict
 import pymongo
-from .errors import AdminExists
+from .errors import AdminExistsError
 
 
 class Model:
-    def __init__(self, mongo_uri: str, database: str, web_hook: str):
+    def __init__(self, mongo_uri: str, database: str):
         _uri = mongo_uri
         self.db = pymongo.MongoClient(_uri)[database]
 
@@ -31,5 +31,10 @@ class Model:
     def admin_register(self, data: Dict[str, str]):
         doc = self.db.Admin.find_one({"email": data["email"]})
         if doc:
-            raise AdminExists()
+            raise AdminExistsError()
         self.db.Admin.insert_one(data)
+
+    def admin_from_email(self, email: str):
+        doc = self.db.Admin.find_one({"email": email})
+        if doc:
+            return doc

@@ -1,8 +1,11 @@
 from pydantic.main import BaseModel
+
+from server.models.errors import AdminDoesNotExistError
 from . import model
 from bson import json_util
 import json
 from typing import Dict
+from hashlib import sha256
 
 
 async def get_team_data(page, limit: int = 10):
@@ -27,4 +30,14 @@ async def get_about_us():
 
 async def insert_admin(data: Dict[str, str]):
     data = dict(data)
+    data["password"] = sha256(data["password"].encode()).hexdigest()
     model.admin_register(data)
+
+
+async def verify_admin(email: str, password: str):
+    if admin := model.admin_from_email(email=email):
+        if admin["password"] == sha256(password.encode()).hexdigest():
+            return True
+        else:
+            return False
+    raise AdminDoesNotExistError(msg="Invalid email Id", status_code=403)
