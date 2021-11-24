@@ -7,6 +7,7 @@ class TestAdminRegister(CustomTestClass):
     data = {
         "name": "TestUser",
         "email": "TestUser@example.com",
+        "password": "TestPassword",
         "web_hook": os.getenv("web_hook"),
     }
 
