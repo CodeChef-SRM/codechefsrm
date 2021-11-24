@@ -1,5 +1,11 @@
 import unittest
-from tests import test_contact_us, test_about_us, test_team, test_admin_register
+from tests import (
+    test_contact_us,
+    test_about_us,
+    test_team,
+    test_admin_register,
+    test_admin_login,
+)
 from importlib import import_module
 
 import argparse
@@ -16,6 +22,7 @@ def get_server_tests(suite):
     suite.addTest(unittest.makeSuite(test_about_us.TestAboutUs))
     suite.addTest(unittest.makeSuite(test_team.TestTeamPage))
     suite.addTest(unittest.makeSuite(test_admin_register.TestAdminRegister))
+    suite.addTest(unittest.makeSuite(test_admin_login.TestAdminLogin))
 
 
 def main():
