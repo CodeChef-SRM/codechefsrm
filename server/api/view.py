@@ -1,18 +1,20 @@
 import os
-from .errors import InvalidWebhookError
+from .errors import InvalidCredentials, InvalidWebhookError
 
 from server.models.transactions import (
     get_about_us,
     get_team_data,
     insert_details,
     insert_admin,
+    verify_admin,
 )
 from starlette.requests import Request
 from starlette.responses import Response
 
 from . import open_router, admin_router
-from .definitions import ContactUsSchema, AdminRegister
+from .definitions import ContactUsSchema, AdminRegisterSchema, AdminLoginSchema
 from .utils import post_wrapper
+from server.authentication.utils import generate_token
 
 
 @open_router.get("/team", status_code=200)
@@ -37,9 +39,16 @@ async def about_us():
 
 
 @post_wrapper(path="/register", router=admin_router, status_code=201)
-async def admin_register(request: Request, data: AdminRegister):
+async def admin_register(request: Request, data: AdminRegisterSchema):
     web_hook = os.getenv("web_hook")
     if data.web_hook != web_hook:
         raise InvalidWebhookError()
     await insert_admin(data=data)
     return {"success": True}
+
+
+@post_wrapper(path="/login", router=admin_router, status_code=200)
+async def admin_login(request: Request, data: AdminLoginSchema):
+    if await verify_admin(email=data.email, password=data.password):
+        return generate_token(payload={"user": data.email, "admin": True})
+    raise InvalidCredentials()
