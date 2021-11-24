@@ -1,13 +1,21 @@
-from server.models.transactions import get_about_us, get_team_data, insert_details
+import os
+from .errors import InvalidWebhookError
+
+from server.models.transactions import (
+    get_about_us,
+    get_team_data,
+    insert_details,
+    insert_admin,
+)
 from starlette.requests import Request
 from starlette.responses import Response
 
-from . import router
-from .definitions import ContactUsSchema
+from . import open_router, admin_router
+from .definitions import ContactUsSchema, AdminRegister
 from .utils import post_wrapper
 
 
-@router.get("/team", status_code=200)
+@open_router.get("/team", status_code=200)
 async def team(response: Response, page):
     team_data = await get_team_data(page=page)
     if isinstance(team_data, str):
@@ -16,13 +24,22 @@ async def team(response: Response, page):
     return team_data
 
 
-@post_wrapper(path="/contact-us", status_code=201, limit="3/minute")
+@post_wrapper(path="/contact-us", router=open_router, status_code=201, limit="3/minute")
 async def contact_us(request: Request, data: ContactUsSchema):
     await insert_details(data=data)
     return {"success": True}
 
 
-@router.get("/about-us", status_code=200)
+@open_router.get("/about-us", status_code=200)
 async def about_us():
     data = await get_about_us()
     return data
+
+
+@post_wrapper(path="/register", router=admin_router, status_code=201)
+async def admin_register(request: Request, data: AdminRegister):
+    web_hook = os.getenv("web_hook")
+    if data.web_hook != web_hook:
+        raise InvalidWebhookError()
+    await insert_admin(data=data)
+    return {"success": True}
