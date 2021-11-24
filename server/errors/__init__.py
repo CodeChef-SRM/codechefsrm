@@ -1,2 +1,2 @@
 from .auth_errors import AuthenticationError
-from .duplicate_errors import DuplicationError
+from .data_error import DataErrors
