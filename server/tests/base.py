@@ -14,6 +14,7 @@ def drop_collections():
     db.drop_collection("Admin")
     db.drop_collection("ContactUs")
     db.drop_collection("Events")
+    db.drop_collection("Team")
 
 
 class CustomTestClass(unittest.TestCase):
