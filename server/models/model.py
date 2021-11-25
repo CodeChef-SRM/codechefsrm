@@ -1,6 +1,6 @@
 from typing import Dict
 import pymongo
-from .errors import AdminExistsError
+from . import errors
 
 
 class Model:
@@ -31,15 +31,34 @@ class Model:
     def admin_register(self, data: Dict[str, str]):
         doc = self.db.Admin.find_one({"email": data["email"]})
         if doc:
-            raise AdminExistsError()
+            raise errors.AdminExistsError()
         self.db.Admin.insert_one(data)
 
     def admin_from_email(self, email: str):
         doc = self.db.Admin.find_one({"email": email})
         if doc:
             return doc
+        raise errors.AdminDoesNotExistError(msg="Invalid email Id", status_code=403)
 
     def events_data(self, skip, limit):
         return self.db.Events.aggregate(
             pipeline=[{"$skip": skip}, {"$limit": limit}, {"$project": {"_id": 0}}]
         )
+
+    def insert_event_data(self, data: Dict[str, str]):
+        doc = self.db.Events.find_one({"event_name": data["event_name"]})
+        if doc:
+            raise errors.EventExistsError()
+        self.db.Events.insert_one(data)
+
+    def update_event_data(self, data: Dict[str, str]):
+        event_name = data.pop("event_name")
+        for key, val in data.items():
+            if not len(val):
+                data.pop(key)
+
+        doc = self.db.Events.find_one_and_update(
+            {"event_name": event_name}, update={"$set": data}
+        )
+        if not doc:
+            raise errors.EventDoesNotError()
