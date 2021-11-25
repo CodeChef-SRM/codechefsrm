@@ -1,4 +1,5 @@
 import os
+from re import T
 
 from .errors import InvalidCredentials, InvalidWebhookError
 
@@ -59,12 +60,31 @@ async def add_event(request: Request, data: definitions.EventSchema):
 @throttle_wrapper(
     path="/update-event", router=admin_router, method="put", status_code=200
 )
-async def modify_event(request: Request, data: definitions.ModifyEventSchema):
+async def update_event(request: Request, data: definitions.ModifyEventSchema):
     await transactions.update_event(data=data)
 
 
 @throttle_wrapper(
     path="/delete-event", router=admin_router, method="delete", status_code=200
 )
-async def delete_event(request: Request, data: definitions.DeleteEventSchema):
+async def delete_event(request: Request, data: definitions.ModifyEventSchema):
     await transactions.delete_event(data=data)
+
+
+@throttle_wrapper(path="/add-team", router=admin_router, method="post", status_code=201)
+async def add_team(request: Request, data: definitions.TeamSchema):
+    await transactions.insert_team(data)
+
+
+@throttle_wrapper(
+    path="/update-team", router=admin_router, method="put", status_code=200
+)
+async def update_team(request: Request, data: definitions.ModifyTeamSchema):
+    await transactions.update_team(data=data)
+
+
+@throttle_wrapper(
+    path="/delete-team", router=admin_router, method="delete", status_code=200
+)
+async def delete_team(request: Request, data: definitions.ModifyTeamSchema):
+    await transactions.delete_team(data)

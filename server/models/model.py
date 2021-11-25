@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union
 import pymongo
 from . import errors
 
@@ -7,6 +7,22 @@ class Model:
     def __init__(self, mongo_uri: str, database: str):
         _uri = mongo_uri
         self.db = pymongo.MongoClient(_uri)[database]
+
+    @staticmethod
+    def sanitize_data(data: Dict[str, Union[str, None]]):
+        """Remove all None values from dict and return new dict
+
+        Args:
+            data (Dict[str, Union[str, None]]): Data sent through API
+
+        Returns:
+            (Dict[str, str]): Relevant data
+        """
+        _data = {}
+        for key, val in data.items():
+            if val:
+                _data[key] = val
+        return _data
 
     def team_data(self, skip: int, limit: int) -> pymongo.cursor.Cursor:
         """Get team details with pagination
@@ -53,12 +69,9 @@ class Model:
 
     def update_event_data(self, data: Dict[str, str]):
         event_name = data.pop("event_name")
-        for key, val in data.items():
-            if not len(val):
-                data.pop(key)
-
+        _data = self.sanitize_data(data)
         doc = self.db.Events.find_one_and_update(
-            {"event_name": event_name}, update={"$set": data}
+            {"event_name": event_name}, update={"$set": _data}
         )
         if not doc:
             raise errors.EventDoesNotError()
@@ -67,3 +80,23 @@ class Model:
         doc = self.db.Events.find_one_and_delete({"event_name": name})
         if not doc:
             raise errors.EventDoesNotError()
+
+    def insert_team_data(self, data: Dict[str, str]):
+        doc = self.db.Team.find_one({"name": data["name"]})
+        if doc:
+            raise errors.MemberExistsError()
+        self.db.Team.insert_one(data)
+
+    def update_team_data(self, data):
+        member_name = data.pop("name")
+        _data = self.sanitize_data(data)
+        doc = self.db.Team.find_one_and_update(
+            {"name": member_name}, update={"$set": _data}
+        )
+        if not doc:
+            raise errors.MemberDoesNotExistError()
+
+    def delete_team_data(self, name: str):
+        doc = self.db.Team.find_one_and_delete({"name": name})
+        if not doc:
+            raise errors.MemberDoesNotExistError()

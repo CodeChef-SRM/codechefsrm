@@ -54,3 +54,18 @@ async def update_event(data: definitions.BaseSchema):
 async def delete_event(data: definitions.BaseSchema):
     event_name = data.event_name
     model.delete_event_data(name=event_name)
+
+
+async def insert_team(data: definitions.BaseSchema):
+    data = dict(data)
+    model.insert_team_data(data)
+
+
+async def update_team(data: definitions.BaseSchema):
+    data = dict(data)
+    model.update_team_data(data)
+
+
+async def delete_team(data: definitions.BaseSchema):
+    name = data.name
+    model.delete_team_data(name=name)
