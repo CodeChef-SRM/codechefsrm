@@ -1,6 +1,4 @@
 import os
-from re import T
-
 from .errors import InvalidCredentials, InvalidWebhookError
 
 from server.models import transactions
