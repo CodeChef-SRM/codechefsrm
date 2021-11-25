@@ -6,7 +6,9 @@ def invalid_data_handler(request, error):
 
 
 def auth_error_handler(request, error):
-    return JSONResponse(content={"error": str(error)}, status_code=error.status_code)
+    return JSONResponse(
+        content={"error": "Invalid credentials"}, status_code=error.status_code
+    )
 
 
 def data_error_handler(request, error):
