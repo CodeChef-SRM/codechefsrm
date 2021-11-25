@@ -62,3 +62,8 @@ class Model:
         )
         if not doc:
             raise errors.EventDoesNotError()
+
+    def delete_event_data(self, name: str):
+        doc = self.db.Events.find_one_and_delete({"event_name": name})
+        if not doc:
+            raise errors.EventDoesNotError()

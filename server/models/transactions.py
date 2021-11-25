@@ -1,6 +1,6 @@
 import json
 from hashlib import sha256
-from typing import Dict
+from server.api import definitions
 
 from bson import json_util
 from pydantic.main import BaseModel
@@ -28,7 +28,7 @@ async def get_events(page, limit: int = 10):
     return json.loads(json_util.dumps(model.events_data(skip=skip, limit=limit)))
 
 
-async def insert_admin(data: Dict[str, str]):
+async def insert_admin(data: definitions.BaseSchema):
     data = dict(data)
     data["password"] = sha256(data["password"].encode()).hexdigest()
     model.admin_register(data)
@@ -41,11 +41,16 @@ async def verify_admin(email: str, password: str):
     return False
 
 
-async def insert_event(data: Dict[str, str]):
+async def insert_event(data: definitions.BaseSchema):
     data = dict(data)
     model.insert_event_data(data=data)
 
 
-async def update_event(data: Dict[str, str]):
+async def update_event(data: definitions.BaseSchema):
     data = dict(data)
     model.update_event_data(data=data)
+
+
+async def delete_event(data: definitions.BaseSchema):
+    event_name = data.event_name
+    model.delete_event_data(name=event_name)
