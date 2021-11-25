@@ -1,6 +1,5 @@
 import os
 
-from starlette.responses import JSONResponse
 from .errors import InvalidCredentials, InvalidWebhookError
 
 from server.models import transactions
@@ -62,4 +61,10 @@ async def add_event(request: Request, data: definitions.EventSchema):
 )
 async def modify_event(request: Request, data: definitions.ModifyEventSchema):
     await transactions.update_event(data=data)
-    return {}
+
+
+@throttle_wrapper(
+    path="/delete-event", router=admin_router, method="delete", status_code=200
+)
+async def delete_event(request: Request, data: definitions.DeleteEventSchema):
+    await transactions.delete_event(data=data)

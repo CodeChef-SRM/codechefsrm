@@ -52,3 +52,10 @@ class TestEventsData(CustomTestClass):
             headers=headers,
         )
         self.assertEqual(response.status_code, 200)
+
+        response = self.client.delete(
+            self.base_url + "/api/admin/delete-event",
+            data=json.dumps({"event_name": self.data["event_name"]}),
+            headers=headers,
+        )
+        self.assertEqual(response.status_code, 200)
