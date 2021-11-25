@@ -37,15 +37,31 @@ class EventSchema(BaseSchema):
 
 class ModifyEventSchema(BaseSchema):
     event_name: str
-    event_info: Optional[constr(max_length=100, strip_whitespace=True)]
-    event_start_date: Optional[str]
-    event_end_date: Optional[str]
+    event_info: Optional[constr(max_length=100, strip_whitespace=True)] = None
+    event_start_date: Optional[str] = None
+    event_end_date: Optional[str] = None
     image_url: Optional[
         constr(
             regex=r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
         )
-    ]
+    ] = None
 
 
-class DeleteEventSchema(BaseSchema):
-    event_name: str
+class TeamSchema(BaseSchema):
+    name: str
+    designation: str
+    tag_line: str
+    image_url: constr(
+        regex=r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+    )
+
+
+class ModifyTeamSchema(BaseSchema):
+    name: str
+    designation: Optional[str] = None
+    tag_line: Optional[str] = None
+    image_url: Optional[
+        constr(
+            regex=r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+        )
+    ] = None

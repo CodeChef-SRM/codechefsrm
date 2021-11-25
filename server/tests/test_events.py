@@ -46,6 +46,7 @@ class TestEventsData(CustomTestClass):
 
         data = self.data.copy()
         data["event_info"] = "Test Info"
+        data.pop("event_start_date"), data.pop("event_end_date"), data.pop("image_url")
         response = self.client.put(
             self.base_url + "/api/admin/update-event",
             data=json.dumps(data),
