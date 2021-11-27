@@ -17,7 +17,7 @@ async def verify_user(request: Request, call_next: Callable):
             token_details = get_token(request.headers)
             token = validate_token_type(token_details, "Bearer")
         except (ValueError, AssertionError, NoTokenFound) as e:
-            return Response(str(e), status_code=403)
+            return Response("Invalid Token", status_code=403)
 
         value = tokens.verify_key(token)
         if isinstance(value, str):
