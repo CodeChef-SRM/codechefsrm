@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict
 from pydantic import BaseModel, constr
 
 
@@ -33,6 +33,11 @@ class EventSchema(BaseSchema):
     image_url: constr(
         regex=r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
     )
+    registration_url: Optional[
+        constr(
+            regex=r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+        )
+    ] = None
 
 
 class ModifyEventSchema(BaseSchema):
@@ -45,10 +50,16 @@ class ModifyEventSchema(BaseSchema):
             regex=r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
         )
     ] = None
+    registration_url: Optional[
+        constr(
+            regex=r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+        )
+    ] = None
 
 
 class TeamSchema(BaseSchema):
     name: str
+    social: Optional[Dict[str, str]]
     designation: str
     tag_line: str
     image_url: constr(
@@ -58,6 +69,7 @@ class TeamSchema(BaseSchema):
 
 class ModifyTeamSchema(BaseSchema):
     name: str
+    social: Optional[Dict[str, str]]
     designation: Optional[str] = None
     tag_line: Optional[str] = None
     image_url: Optional[
