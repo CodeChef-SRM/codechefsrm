@@ -22,6 +22,11 @@ class TestTeamPage(CustomTestClass):
             "designation": "TestPosition",
             "tag_line": "Test Tag Line",
             "image_url": "https://google.com",
+            "social": {
+                "linkedin": "https://linkedin.com",
+                "github": "https://github.com",
+                "twitter": "https://twitter.com",
+            },
         }
         response = self.client.post(
             self.base_url + "/api/admin/add-team", data=json.dumps(data)
@@ -42,6 +47,11 @@ class TestTeamPage(CustomTestClass):
             "name": "TestUser",
             "designation": "ChangedDesignation",
             "image_url": "https://changedimage.com",
+            "social": {
+                "github": "https://github.com/xyz",
+                "linkedin": "https://linkedin.com/xyz",
+                "twitter": "https://twitter.com/xyz",
+            },
         }
         response = self.client.put(
             self.base_url + "/api/admin/update-team", data=json.dumps(update_data)
