@@ -20,7 +20,13 @@ __title__ = "CodeChef SRM Student Chapter"
 
 load_dotenv()
 
-application = FastAPI()
+application = FastAPI(
+    title=__title__,
+    version=__version__,
+    docs_url="/docs",
+    description="API for CodeChef SRM",
+    redoc_url="/redoc",
+)
 
 application.add_middleware(
     CORSMiddleware,
