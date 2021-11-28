@@ -28,6 +28,7 @@ application = FastAPI(
     redoc_url="/redoc",
 )
 
+application.middleware("http")(verify_user)
 application.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -35,8 +36,6 @@ application.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-application.middleware("http")(verify_user)
 
 application.state.limiter = limiter
 application.exception_handler(RequestValidationError)(invalid_data_handler)
