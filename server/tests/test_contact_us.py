@@ -1,14 +1,10 @@
-import unittest
-import requests
+from .base import CustomTestClass
 import json
 
 
-class TestContactUs(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.client = requests.Session()
-        cls.base_url = "http://localhost:8000"
-        cls.base_data = {
+class TestContactUs(CustomTestClass):
+    def setUp(self) -> None:
+        self.base_data = {
             "name": "Test",
             "email": "testuser@example.com",
             "query": "This is a test query blah blah blah blah blah blah blah blah blah blah blah blah blah",
@@ -32,12 +28,3 @@ class TestContactUs(unittest.TestCase):
         data["email"] = "invalidaddr@123"
         response = self.client.post(self.base_url + "/api/contact-us", data=data)
         self.assertEqual(response.status_code, 400)
-
-    def test_contact_us_throttle(self):
-        for idx, _ in enumerate(range(10), start=1):
-            response = self.client.post(
-                self.base_url + "/api/contact-us",
-                data=json.dumps(self.base_data),
-            )
-            if idx == 8:
-                self.assertEqual(response.status_code, 429)

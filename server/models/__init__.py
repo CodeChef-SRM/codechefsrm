@@ -4,4 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-model = Model(mongo_uri=os.getenv("mongo_uri"), database=os.getenv("database"))
+model = Model(
+    mongo_uri=os.getenv("mongo_uri"),
+    database=os.getenv("database"),
+)

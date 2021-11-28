@@ -1,4 +1,4 @@
-name: Run Unit Tests
+name: Server Tests
 
 on: [push]
 
@@ -26,5 +26,7 @@ jobs:
       env:
         database: ${{ secrets.DATABASE }}
         mongo_uri: ${{ secrets.MONGO_URI }}
+        secret_key: ${{ secrets.SECRET_KEY }}
+        web_hook: ${{ secrets.WEB_HOOK }}
       run: |
           . ./run_server_tests.sh run-server || true
