@@ -1,0 +1,39 @@
+.member__card {
+  max-width: 330px;
+  height: 430px;
+  padding: 10px;
+  width: 100%;
+  background: #000;
+  margin: 10px;
+  color: #fff;
+}
+.member__image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+.member__card > h2 {
+  margin: 10px 0px;
+}
+.member__card > h3 {
+  margin: 5px 0px;
+}
+.member__card > p {
+  margin: 10px 0px;
+}
+.member__card > a {
+  color: #fff;
+}
+.member__modify__section > svg {
+  margin: 5px;
+  cursor: pointer;
+}
+.event__edit__form > h2 {
+  color: #000;
+}
+.event__edit__form > p {
+  color: #000;
+}
+.event__edit__form > button {
+  margin-top: 10px;
+}

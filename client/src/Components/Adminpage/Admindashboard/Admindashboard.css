@@ -1,0 +1,89 @@
+.admin__nav__main {
+  width: 95%;
+  padding: 1% 2.5%;
+}
+.link {
+  margin-left: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.prim__button {
+  background: #000;
+  border: none;
+  padding: 15px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+  margin-left: 10px;
+  transition: all 0.3s ease-in;
+}
+.prim__button:hover {
+  background: #fff;
+  color: #000;
+}
+.prim__button:hover .add__svg {
+  fill: #000;
+}
+/* EVENTS SECTION */
+.events__section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 95%;
+  padding: 2.5%;
+  height: auto;
+}
+.events__heading {
+  width: 95%;
+  padding: 1% 2.5%;
+}
+.form__input {
+  margin: 10px 0px;
+  padding: 10px;
+  width: 100%;
+  min-width: 350px;
+  max-width: 350px;
+  border: none;
+  border-bottom: 2px solid #cacaca;
+  transition: all 0.2s ease-in;
+}
+.form__input:focus {
+  border: none;
+  border-bottom: 2px solid #000;
+  outline: none;
+}
+/* ADDEVENT MODAL */
+.add__event__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #fff;
+  height: 100vh;
+  padding: 10px;
+  border-right: 2px solid #000;
+  transform: translateX(-100%);
+  transition: all 0.3s ease-in;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-bottom: 20px;
+  z-index: 100;
+}
+.add__event__modal > h1 {
+  margin-bottom: 10%;
+}
+.add__event__modal p {
+  font-size: 12px;
+  color: #000;
+}
+.close__button {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  transform: rotate(45deg);
+  cursor: pointer;
+}
+.translated {
+  transform: translateX(0%);
+}
