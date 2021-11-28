@@ -27,7 +27,7 @@ class AdminLoginSchema(BaseSchema):
 
 class EventSchema(BaseSchema):
     event_name: str
-    event_info: constr(max_length=100, strip_whitespace=True)
+    event_info: constr(max_length=250, strip_whitespace=True)
     event_start_date: str
     event_end_date: str
     image_url: constr(
@@ -43,7 +43,7 @@ class EventSchema(BaseSchema):
 class ModifyEventSchema(BaseSchema):
     id: constr(max_length=8, min_length=8, strip_whitespace=True)
     event_name: Optional[str] = None
-    event_info: Optional[constr(max_length=100, strip_whitespace=True)] = None
+    event_info: Optional[constr(max_length=250, strip_whitespace=True)] = None
     event_start_date: Optional[str] = None
     event_end_date: Optional[str] = None
     image_url: Optional[
