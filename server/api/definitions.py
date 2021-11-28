@@ -41,7 +41,8 @@ class EventSchema(BaseSchema):
 
 
 class ModifyEventSchema(BaseSchema):
-    event_name: str
+    id: constr(max_length=8, min_length=8, strip_whitespace=True)
+    event_name: Optional[str] = None
     event_info: Optional[constr(max_length=100, strip_whitespace=True)] = None
     event_start_date: Optional[str] = None
     event_end_date: Optional[str] = None
@@ -68,7 +69,8 @@ class TeamSchema(BaseSchema):
 
 
 class ModifyTeamSchema(BaseSchema):
-    name: str
+    id: constr(max_length=8, min_length=8, strip_whitespace=True)
+    name: Optional[str] = None
     social: Optional[Dict[str, str]]
     designation: Optional[str] = None
     tag_line: Optional[str] = None

@@ -9,9 +9,9 @@ from . import model
 from .utils import pagination_helper
 
 
-async def get_team_data(page, limit: int = 10):
+async def get_team_data(page, limit: int = 10, id: bool = False):
     skip = pagination_helper(page, limit)
-    return json.loads(json_util.dumps(model.team_data(skip=skip, limit=limit)))
+    return json.loads(json_util.dumps(model.team_data(skip=skip, limit=limit, id=id)))
 
 
 async def insert_details(data: BaseModel):
@@ -23,9 +23,9 @@ async def get_about_us():
     return json.loads(json_util.dumps(model.about_us()))
 
 
-async def get_events(page, limit: int = 10):
+async def get_events(page, limit: int = 10, id: bool = False):
     skip = pagination_helper(page, limit)
-    return json.loads(json_util.dumps(model.events_data(skip=skip, limit=limit)))
+    return json.loads(json_util.dumps(model.events_data(skip=skip, limit=limit, id=id)))
 
 
 async def insert_admin(data: definitions.BaseSchema):
@@ -52,8 +52,8 @@ async def update_event(data: definitions.BaseSchema):
 
 
 async def delete_event(data: definitions.BaseSchema):
-    event_name = data.event_name
-    model.delete_event_data(name=event_name)
+    _id = data.id
+    model.delete_event_data(_id=_id)
 
 
 async def insert_team(data: definitions.BaseSchema):
@@ -67,5 +67,5 @@ async def update_team(data: definitions.BaseSchema):
 
 
 async def delete_team(data: definitions.BaseSchema):
-    name = data.name
-    model.delete_team_data(name=name)
+    _id = data.id
+    model.delete_team_data(_id=_id)

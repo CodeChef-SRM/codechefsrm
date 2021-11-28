@@ -21,6 +21,7 @@ async def team(page):
 )
 async def contact_us(request: Request, data: definitions.ContactUsSchema):
     await transactions.insert_details(data=data)
+    return {"success": True}
 
 
 @open_router.get("/about-us", status_code=200)
@@ -41,6 +42,7 @@ async def admin_register(request: Request, data: definitions.AdminRegisterSchema
     if data.web_hook != web_hook:
         raise InvalidWebhookError()
     await transactions.insert_admin(data=data)
+    return {"success": True}
 
 
 @throttle_wrapper(path="/login", router=admin_router, status_code=200)
@@ -50,9 +52,20 @@ async def admin_login(request: Request, data: definitions.AdminLoginSchema):
     raise InvalidCredentials()
 
 
+@admin_router.get("/team", status_code=200)
+async def admin_team(page):
+    return await transactions.get_team_data(page=page, id=True)
+
+
+@admin_router.get("/events", status_code=200)
+async def admin_events(page):
+    return await transactions.get_events(page=page, id=True)
+
+
 @throttle_wrapper(path="/add-event", router=admin_router, status_code=201)
 async def add_event(request: Request, data: definitions.EventSchema):
     await transactions.insert_event(data=data)
+    return {"success": True}
 
 
 @throttle_wrapper(
@@ -60,6 +73,7 @@ async def add_event(request: Request, data: definitions.EventSchema):
 )
 async def update_event(request: Request, data: definitions.ModifyEventSchema):
     await transactions.update_event(data=data)
+    return {"success": True}
 
 
 @throttle_wrapper(
@@ -67,11 +81,13 @@ async def update_event(request: Request, data: definitions.ModifyEventSchema):
 )
 async def delete_event(request: Request, data: definitions.ModifyEventSchema):
     await transactions.delete_event(data=data)
+    return {"success": True}
 
 
 @throttle_wrapper(path="/add-team", router=admin_router, method="post", status_code=201)
 async def add_team(request: Request, data: definitions.TeamSchema):
     await transactions.insert_team(data)
+    return {"success": True}
 
 
 @throttle_wrapper(
@@ -79,6 +95,7 @@ async def add_team(request: Request, data: definitions.TeamSchema):
 )
 async def update_team(request: Request, data: definitions.ModifyTeamSchema):
     await transactions.update_team(data=data)
+    return {"success": True}
 
 
 @throttle_wrapper(
@@ -86,3 +103,4 @@ async def update_team(request: Request, data: definitions.ModifyTeamSchema):
 )
 async def delete_team(request: Request, data: definitions.ModifyTeamSchema):
     await transactions.delete_team(data)
+    return {"success": True}

@@ -36,6 +36,10 @@ class TestEventsData(CustomTestClass):
         response = self.client.get(self.base_url + "/api/events", params={"page": 1})
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(response.json()) > 0)
+        response = self.client.get(
+            self.base_url + "/api/admin/events", params={"page": 1}
+        )
+        self.assertEqual(response.status_code, 403)
 
         response = self.client.post(
             self.base_url + "/api/admin/add-event",
@@ -52,11 +56,32 @@ class TestEventsData(CustomTestClass):
             data=json.dumps(data),
             headers=headers,
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
+
+        data = self.data.copy()
+        data["id"] = response = self.client.get(
+            self.base_url + "/api/admin/events", params={"page": 1}, headers=headers
+        ).json()[0]["_id"]
+
+        data["event_info"] = "Test Info"
+        data["name"] = "Changed Event Name"
+        data.pop("event_start_date"), data.pop("event_end_date"), data.pop("image_url")
+        response = self.client.put(
+            self.base_url + "/api/admin/update-event",
+            data=json.dumps(data),
+            headers=headers,
+        )
 
         response = self.client.delete(
             self.base_url + "/api/admin/delete-event",
             data=json.dumps({"event_name": self.data["event_name"]}),
+            headers=headers,
+        )
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.delete(
+            self.base_url + "/api/admin/delete-event",
+            data=json.dumps({"id": data["id"]}),
             headers=headers,
         )
         self.assertEqual(response.status_code, 200)
