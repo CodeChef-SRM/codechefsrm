@@ -23,5 +23,6 @@ def generate_token(payload: Dict[str, Any], **kwargs):
 async def refresh_to_access(token: str):
     payload = tokens.verify_key(token)
     if payload.get("refresh"):
+        payload.pop("refresh")
         return tokens.generate_key(payload, get_refresh=True)
     raise InvalidToken("Invalid refresh token")
