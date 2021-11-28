@@ -19,7 +19,7 @@ class EventExistsError(DataErrors):
         super().__init__(msg)
 
 
-class EventDoesNotError(DataErrors):
+class EventDoesNotExistError(DataErrors):
     def __init__(self, msg="Event does not exist!") -> None:
         self.status_code = 400
         super().__init__(msg)
