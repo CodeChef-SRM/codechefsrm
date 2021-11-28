@@ -7,7 +7,7 @@ from starlette.requests import Request
 from . import open_router, admin_router
 from . import definitions
 from .utils import throttle_wrapper
-from server.authentication.utils import generate_token
+from server.authentication.utils import generate_token, refresh_to_access
 
 
 @open_router.get("/team", status_code=200)
@@ -48,7 +48,9 @@ async def admin_register(request: Request, data: definitions.AdminRegisterSchema
 @throttle_wrapper(path="/login", router=admin_router, status_code=200)
 async def admin_login(request: Request, data: definitions.AdminLoginSchema):
     if await transactions.verify_admin(email=data.email, password=data.password):
-        return generate_token(payload={"user": data.email, "admin": True})
+        return generate_token(
+            payload={"user": data.email, "admin": True}, get_refresh=True
+        )
     raise InvalidCredentials()
 
 
@@ -104,3 +106,8 @@ async def update_team(request: Request, data: definitions.ModifyTeamSchema):
 async def delete_team(request: Request, data: definitions.ModifyTeamSchema):
     await transactions.delete_team(data)
     return {"success": True}
+
+
+@admin_router.get("/refresh-token", status_code=200)
+async def refresh_token(request: Request):
+    return await refresh_to_access(request.state.user)

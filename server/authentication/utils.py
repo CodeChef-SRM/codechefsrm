@@ -1,5 +1,6 @@
 from typing import Any, Dict
-from .errors import NoTokenFound
+
+from .errors import NoTokenFound, InvalidToken
 from . import tokens
 
 
@@ -17,3 +18,10 @@ def validate_token_type(token: str, token_type: str = "Bearer"):
 
 def generate_token(payload: Dict[str, Any], **kwargs):
     return tokens.generate_key(payload=payload, **kwargs)
+
+
+async def refresh_to_access(token: str):
+    payload = tokens.verify_key(token)
+    if payload.get("refresh"):
+        return tokens.generate_key(payload, get_refresh=True)
+    raise InvalidToken("Invalid refresh token")

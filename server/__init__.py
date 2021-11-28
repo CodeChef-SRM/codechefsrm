@@ -50,3 +50,8 @@ application.include_router(admin_router, prefix="/api/admin")
 async def health_check():
     uptime = await process_time()
     return {"upTime": uptime}
+
+
+@application.get("/me", status_code=200)
+async def verify_token():
+    return {"success": True}
