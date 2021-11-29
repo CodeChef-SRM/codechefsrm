@@ -1,0 +1,22 @@
+.alert__main {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 25px;
+  margin: 25px;
+  background: rgb(238, 238, 238);
+  transform: translateY(150%);
+  transition: all 0.3s ease;
+}
+.success {
+  border-left: 5px solid #02c39a;
+}
+.danger {
+  border-left: 5px solid #e40b0b;
+}
+.visible {
+  transform: translateY(0%);
+}
+/*
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoidXNlcm5hbWVAZ21haWwuY29tIiwiYWRtaW4iOnRydWUsImV4cCI6MTYzODEyMjgyNX0.xIscn0e_KPdaBmxZ4lBcY1BAezB7AbBWGLHu-RT0Xzc
+*/
