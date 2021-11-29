@@ -1,65 +1,158 @@
 import React from 'react'
+import { useContext } from 'react'
 import { useState } from 'react/cjs/react.development'
+import AlertContext from '../AlertContext/AlertContext'
 import TeamMemberContext from './TeamMemberContext'
 
 const TeamMemberState = (props) => {
 
+    const url = 'https://4db7-103-121-204-224.ngrok.io'
+
     const [team, setTeam] = useState([])
 
+    const alertcontext = useContext(AlertContext);
+    const { handleAlert } = alertcontext;
 
-    const TeamData = [
-        {
-            id: "1010323481",
-            name: "Mukesh",
-            image: "https://www.researchgate.net/profile/Tahir-Turk/publication/305402203/figure/fig1/AS:613946650288169@1523387696615/mages-from-the-Mukesh-Television-announcement-outdoor-and-print-materials-The-public_Q640.jpg",
-            designation: "Corporate",
-            tagline: "mera naam mukesh h",
-            linkedIn: "http://www.google.co.in",
-            github: "https://www.github.com"
-        },
-        {
-            id: "1010323482",
-            name: "Zomato wale bhaiya",
-            image: "https://indianmemetemplates.com/wp-content/uploads/happy-zomato-delivery-guy-meme-template.jpg",
-            designation: "Corporate",
-            tagline: "apna sab shi h",
-            linkedIn: "http://www.google.co.in",
-            github: "https://www.github.com"
-        },
-        {
-            id: "1010323483",
-            name: "Hindustani bhau",
-            image: "https://i2.wp.com/dignitaryunboxed.com/wp-content/uploads/2021/05/Hindustani-Bhau-Pictures.jpg?resize=708%2C809&ssl=1",
-            designation: "Technical",
-            tagline: "Nikal phli fursat me",
-            linkedIn: "http://www.google.co.in",
-            github: "https://www.github.com"
+    const meRequest = async () => {
+        const request = await fetch(`${url}/me`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('ccscadminaccesstokenadmin')
+            }
+        })
+
+        const response = await request.status;
+        if (response === 403) {
+            const refresh = await fetch(`${url}/api/admin/refresh-token`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('ccscadminaccesstokenrefresh')
+                }
+            })
+            const response_refresh = await refresh.status;
+            if (response_refresh === 200) {
+                console.log(response_refresh);
+                const tokens = await refresh.json();
+                localStorage.setItem('ccscadminaccesstokenadmin', tokens.access_token)
+                localStorage.setItem('ccscadminaccesstokenrefresh', tokens.refresh_token)
+            } else {
+                console.log(response_refresh);
+                localStorage.setItem('ccscadminaccesstokenadmin', "null")
+                localStorage.setItem('ccscadminaccesstokenrefresh', "null")
+            }
         }
-    ]
-
-    const getTeam = () => {
-        setTeam(TeamData);
+        console.log(response);
     }
 
-    const addTeamMember = (name, image, designation, tagline, linkedIn, github) => {
+
+    const getTeam = async (number) => {
+        meRequest();
+        const request = await fetch(`${url}/api/admin/team?page=${number}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('ccscadminaccesstokenadmin')
+            }
+        })
+        const response = await request.json();
+        console.log(response);
+        setTeam(response);
+    }
+
+    const addTeamMember = async (name, image, designation, tagline, linkedIn, github) => {
+        meRequest();
         const Team_json = {
-            name: name,
-            image: image,
-            designation: designation,
-            tagline: tagline,
-            linkedIn: linkedIn,
-            github: github
+            "name": name,
+            "social": {
+                "linkedIn": linkedIn,
+                "Github": github
+            },
+            "designation": designation,
+            "tag_line": tagline,
+            "image_url": image
         }
-        setTeam(TeamData.concat(Team_json))
+        setTeam(team.concat(Team_json))
+        const response = await fetch(`${url}/api/admin/add-team`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('ccscadminaccesstokenadmin')
+            },
+            body: JSON.stringify({
+                "name": name,
+                "social": {
+                    "linkedIn": linkedIn,
+                    "Github": github
+                },
+                "designation": designation,
+                "tag_line": tagline,
+                "image_url": image
+            })
+        })
+        const json = await response.json();
+        console.log(json);
+        if (json.success) {
+            handleAlert('Team Member Added Successfully !!', 'success');
+        } else {
+            handleAlert('Some Error in Adding Please Add Again !!', 'danger');
+        }
     }
 
-    const deleteTeamMember = (id) => {
-        let newTeam = team.filter((t) => { return t.id !== id });
+    const deleteTeamMember = async (id) => {
+        meRequest();
+        let newTeam = team.filter((t) => { return t._id !== id });
         setTeam(newTeam);
+        const response = await fetch(`${url}/api/admin/delete-team`, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('ccscadminaccesstokenadmin')
+            },
+            body: JSON.stringify({
+                "id": id
+            })
+        })
+        const json = await response.json();
+        console.log(json);
+        if (json.success) {
+            handleAlert('Team Member Deleted Successfully !!', 'success');
+        } else {
+            handleAlert('Error While Deleting. Try Refreshing and do it again !!', 'success');
+        }
     }
 
-    const editTeamMember = (id, name, image, designation, tagline, linkedIn, github) => {
-
+    const editTeamMember = async (id, name, image, designation, tagline, linkedIn, github) => {
+        meRequest();
+        console.log(id);
+        const response = await fetch(`${url}/api/admin/update-team`, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('ccscadminaccesstokenadmin')
+            },
+            body: JSON.stringify(
+                {
+                    "id": id,
+                    "name": name,
+                    "social": {
+                        "linkedIn": linkedIn,
+                        "Github": github
+                    },
+                    "designation": designation,
+                    "tag_line": tagline,
+                    "image_url": image
+                }
+            )
+        })
+        const json = await response.json();
+        console.log(json);
+        if (json.success) {
+            handleAlert('Team Member Edited Successfully !!', 'success');
+        } else {
+            handleAlert('Error While Editing Please try again !!', 'success');
+        }
     }
 
     return (

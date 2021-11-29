@@ -4,10 +4,12 @@ import { useState } from 'react/cjs/react.development';
 import CCSCLogo from '../../../Assets/BlueWithBrackets.png'
 import EventsContext from '../../../context/EventsContext/EventsContext';
 import TeamMemberContext from '../../../context/TeamMemberContext/TeamMemberContext';
-
 import './Admindashboard.css'
 import EventsCard from './EventsCard/EventsCard';
 import TeamCard from './TeamCard/TeamCard';
+
+import { useNavigate } from 'react-router-dom';
+import AlertContext from '../../../context/AlertContext/AlertContext';
 
 const Admindashboard = () => {
     const EventContext = useContext(EventsContext);
@@ -16,22 +18,43 @@ const Admindashboard = () => {
     const TeamContext = useContext(TeamMemberContext);
     const { team, getTeam, addTeamMember } = TeamContext;
 
+    const alertContext = useContext(AlertContext);
+    const { handleAlert } = alertContext;
+
+    const [eventPageNumber, setEventPageNumber] = useState(1);
+    const [teamPageNumber, setTeamPageNumber] = useState(1);
+
+    const history = useNavigate();
+
     useEffect(() => {
-        getEvents();
-        getTeam();
+        if (localStorage.getItem('ccscadminaccesstokenadmin') !== "null") {
+            getEvents(eventPageNumber);
+            getTeam(teamPageNumber);
+        } else {
+            history('/admin')
+        }
         // eslint-disable-next-line
-    }, [])
+    }, [eventPageNumber, teamPageNumber])
     return (
         <>
-            <AdminNavbar />
-            <EventsSection events={events} addEvent={addEvent} />
-            <TeamSection team={team} addTeamMember={addTeamMember} />
+            <AdminNavbar handleAlert={handleAlert} />
+            <EventsSection events={events} addEvent={addEvent} eventPageNumber={eventPageNumber} setEventPageNumber={setEventPageNumber} />
+            <TeamSection team={team} addTeamMember={addTeamMember} teamPageNumber={teamPageNumber} setTeamPageNumber={setTeamPageNumber} />
         </>
     )
 }
 
 
-const AdminNavbar = () => {
+const AdminNavbar = ({ handleAlert }) => {
+
+    const history = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('ccscadminaccesstoken');
+        history('/admin');
+        handleAlert('Log Out Successful !!', 'success')
+    }
+
     return (
         <div className="admin__nav__main flex__center flex__space__between">
             <div className="flex__center">
@@ -39,19 +62,19 @@ const AdminNavbar = () => {
                 <NavLink to="events" smooth={true} className="link">
                     EVENTS
                 </NavLink>
-                <NavLink to="about" smooth={true} className="link">
+                <NavLink to="team" smooth={true} className="link">
                     TEAM
                 </NavLink>
             </div>
             <div className="flex__center">
-                <p>Welcome <b>UserName</b></p>
-                <button className="prim__button">Log Out</button>
+                <p><b>Welcome</b></p>
+                <button className="prim__button" onClick={() => handleLogout()}>Log Out</button>
             </div>
         </div>
     )
 }
 
-const EventsSection = ({ events, addEvent }) => {
+const EventsSection = ({ events, addEvent, eventPageNumber, setEventPageNumber }) => {
     const [addEventModal, setAddEventModal] = useState(false);
     return (
         <div className="events__section__main" id="events">
@@ -62,12 +85,20 @@ const EventsSection = ({ events, addEvent }) => {
                     Add Event
                 </button>
             </div>
+            <div className="Pagination__Toggle flex__center">
+                <button className="flex__center" onClick={() => setEventPageNumber(eventPageNumber - 1)}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25" fill='#000'><path d="M11.29,12l3.54-3.54a1,1,0,0,0,0-1.41,1,1,0,0,0-1.42,0L9.17,11.29a1,1,0,0,0,0,1.42L13.41,17a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41Z" /></svg></button>
+                <h3>{eventPageNumber}</h3>
+                <button className="flex__center" onClick={() => setEventPageNumber(eventPageNumber + 1)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25" fill='#000' style={{ transform: 'rotate(180deg)' }}><path d="M11.29,12l3.54-3.54a1,1,0,0,0,0-1.41,1,1,0,0,0-1.42,0L9.17,11.29a1,1,0,0,0,0,1.42L13.41,17a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41Z" /></svg>
+                </button>
+            </div>
             <AddEventModal addEventModal={addEventModal} setAddEventModal={setAddEventModal} addEvent={addEvent} />
             <div className="events__section">
                 {
-                    events.map((event) => {
-                        return <EventsCard key={event.id} event={event} />
-                    })
+                    (events.length !== 0) ?
+                        events.map((event) => {
+                            return <EventsCard key={event._id} event={event} />
+                        }) : <p>No Events Here !!</p>
                 }
             </div>
         </div>
@@ -81,22 +112,18 @@ const AddEventModal = ({ addEventModal, setAddEventModal, addEvent }) => {
     const [info, setInfo] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
     const [register, setRegister] = useState('');
 
 
     const HandleSubmit = (e) => {
         e.preventDefault();
-        addEvent(name, poster, info, startDate, startTime, endDate, endTime, register)
+        addEvent(name, poster, info, startDate, endDate, register)
         setAddEventModal(false);
         setName('')
         setPoster('')
         setInfo('')
         setStartDate('')
-        setStartTime('')
         setEndDate('')
-        setEndTime('')
         setRegister('')
     }
 
@@ -110,17 +137,13 @@ const AddEventModal = ({ addEventModal, setAddEventModal, addEvent }) => {
                 <br></br>
                 <div className="flex__center flex__flow__down flex__left">
                     <p>Start Date</p>
-                    <input type='text' className='form__input' placeholder='Enter Event Start Date - (dd/mm/yyyy)' value={startDate} onChange={(e) => setStartDate(e.target.value)}></input>
-                    <p>Start Time</p>
-                    <input type='text' className='form__input' placeholder='Enter Event Start Time - (hh:mm AM/PM)' value={startTime} onChange={(e) => setStartTime(e.target.value)}></input>
+                    <input type='text' className='form__input' placeholder='Enter Event Start Date - (dd/mm/yyyy - hh:mm AM/PM)' value={startDate} onChange={(e) => setStartDate(e.target.value)}></input>
                 </div>
-                <br></br>
                 <div className="flex__center flex__flow__down flex__left">
                     <p>End Date</p>
-                    <input type='text' className='form__input' placeholder='Enter Event End Date - (dd/mm/yyyy)' value={endDate} onChange={(e) => setEndDate(e.target.value)}></input>
-                    <p>End Time</p>
-                    <input type='text' className='form__input' placeholder='Enter Event End Time - (hh:mm AM/PM)' value={endTime} onChange={(e) => setEndTime(e.target.value)}></input>
+                    <input type='text' className='form__input' placeholder='Enter Event End Date - (dd/mm/yyyy - hh:mm AM/PM)' value={endDate} onChange={(e) => setEndDate(e.target.value)}></input>
                 </div>
+                <br></br>
                 <input type='text' className='form__input' placeholder='Enter Event Registration Link' value={register} onChange={(e) => setRegister(e.target.value)}></input>
                 <br></br>
                 <button className="prim__button" type='submit'>Submit</button>
@@ -130,10 +153,10 @@ const AddEventModal = ({ addEventModal, setAddEventModal, addEvent }) => {
     )
 }
 
-const TeamSection = ({ team, addTeamMember }) => {
+const TeamSection = ({ team, addTeamMember, teamPageNumber, setTeamPageNumber }) => {
     const [addMemberModal, setAddMemberModal] = useState(false);
     return (
-        <div className="events__section__main" id="events">
+        <div className="events__section__main" id="team">
             <div className="events__heading flex__center flex__space__between">
                 <h2>Team</h2>
                 <button className="prim__button flex__center flex__space__between" onClick={() => setAddMemberModal(true)}>
@@ -141,11 +164,20 @@ const TeamSection = ({ team, addTeamMember }) => {
                     Add Member
                 </button>
             </div>
+            <div className="Pagination__Toggle flex__center">
+                <button className="flex__center" onClick={() => setTeamPageNumber(teamPageNumber - 1)}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25" fill='#000'><path d="M11.29,12l3.54-3.54a1,1,0,0,0,0-1.41,1,1,0,0,0-1.42,0L9.17,11.29a1,1,0,0,0,0,1.42L13.41,17a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41Z" /></svg></button>
+                <h3>{teamPageNumber}</h3>
+                <button className="flex__center" onClick={() => setTeamPageNumber(teamPageNumber + 1)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25" fill='#000' style={{ transform: 'rotate(180deg)' }}><path d="M11.29,12l3.54-3.54a1,1,0,0,0,0-1.41,1,1,0,0,0-1.42,0L9.17,11.29a1,1,0,0,0,0,1.42L13.41,17a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41Z" /></svg>
+                </button>
+            </div>
             <div className="events__section">
                 {
-                    team.map((member) => {
-                        return <TeamCard member={member} />
-                    })
+                    (team.length !== 0) ?
+                        team.map((member) => {
+                            console.log('updating...');
+                            return <TeamCard member={member} key={member._id} />
+                        }) : <p>No members here !! Please Add someone</p>
                 }
             </div>
             <AddTeamMemberModal addTeamMember={addTeamMember} addMemberModal={addMemberModal} setAddMemberModal={setAddMemberModal} />
