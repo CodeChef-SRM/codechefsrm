@@ -6,6 +6,8 @@ from tests import (
     test_admin_register,
     test_admin_login,
     test_events,
+    test_access_refresh,
+    test_me,
 )
 from importlib import import_module
 
@@ -25,6 +27,8 @@ def get_server_tests(suite):
     suite.addTest(unittest.makeSuite(test_admin_register.TestAdminRegister))
     suite.addTest(unittest.makeSuite(test_admin_login.TestAdminLogin))
     suite.addTest(unittest.makeSuite(test_events.TestEventsData))
+    suite.addTest(unittest.makeSuite(test_me.TestMe))
+    suite.addTest(unittest.makeSuite(test_access_refresh.TestAccessRefresh))
 
 
 def main():

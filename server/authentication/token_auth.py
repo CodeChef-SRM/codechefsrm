@@ -3,9 +3,6 @@ from datetime import datetime, timedelta
 from typing import Dict, Union
 
 import jwt
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 class TokenAuth:

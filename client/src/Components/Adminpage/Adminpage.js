@@ -53,10 +53,10 @@ const Adminpage = () => {
                     <input type='email' className='form__input' placeholder='Enter your E-mail' value={email} onChange={(e) => setEmail(e.target.value)}></input>
                     <input type='password' className='form__input' placeholder='Enter your Password' value={password} onChange={(e) => setPassword(e.target.value)}></input>
                     <button type='submit' className="form__submit__btn">Log In</button>
-                </form>
+                </form >
                 <p>New User - <Link to="/signup">Sign Up</Link></p>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

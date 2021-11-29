@@ -1,6 +1,8 @@
 from typing import Dict, Union
 import pymongo
 from . import errors
+import random
+import string
 
 
 class Model:
@@ -24,19 +26,35 @@ class Model:
                 _data[key] = val
         return _data
 
-    def team_data(self, skip: int, limit: int) -> pymongo.cursor.Cursor:
+    def get_uid(self) -> str:
+        """Returns 8 character alpha numeric unique id
+
+        Returns:
+            str: [Alpha numeric id]
+        """
+
+        gen_id = random.choices(string.ascii_uppercase + string.digits, k=8)
+
+        if self.db.collection.find_one({"_id": gen_id}):
+            return self.get_uid(length=8)
+
+        return "".join(gen_id)
+
+    def team_data(self, skip: int, limit: int, id=False) -> pymongo.cursor.Cursor:
         """Get team details with pagination
 
         Args:
             skip (int): Items to skip
             limit (int): Limit docs
+            id (bool, optional): Default to False: Query member id
 
         Returns:
             pymongo.cursor.Cursor: cursor object
         """
-        return self.db.Team.aggregate(
-            pipeline=[{"$skip": skip}, {"$limit": limit}, {"$project": {"_id": 0}}]
-        )
+        pipeline = [{"$skip": skip}, {"$limit": limit}, {"$project": {"_id": id}}]
+        if id:
+            pipeline = pipeline[:-1]
+        return self.db.Team.aggregate(pipeline=pipeline)
 
     def insert_contact_details(self, data: Dict[str, str]):
         self.db.ContactUs.insert_one(data)
@@ -56,47 +74,50 @@ class Model:
             return doc
         raise errors.AdminDoesNotExistError(msg="Invalid email Id", status_code=403)
 
-    def events_data(self, skip, limit):
-        return self.db.Events.aggregate(
-            pipeline=[{"$skip": skip}, {"$limit": limit}, {"$project": {"_id": 0}}]
-        )
+    def events_data(self, skip, limit, id=False):
+        pipeline = [{"$skip": skip}, {"$limit": limit}, {"$project": {"_id": id}}]
+        if id:
+            pipeline = pipeline[:-1]
+        return self.db.Events.aggregate(pipeline=pipeline)
 
     def insert_event_data(self, data: Dict[str, str]):
         doc = self.db.Events.find_one({"event_name": data["event_name"]})
         if doc:
             raise errors.EventExistsError()
+        data["_id"] = self.get_uid()
         self.db.Events.insert_one(data)
 
     def update_event_data(self, data: Dict[str, str]):
-        event_name = data.pop("event_name")
+        event_id = data.pop("id")
         _data = self.sanitize_data(data)
         doc = self.db.Events.find_one_and_update(
-            {"event_name": event_name}, update={"$set": _data}
+            {"_id": event_id}, update={"$set": _data}
         )
         if not doc:
-            raise errors.EventDoesNotError()
+            raise errors.EventDoesNotExistError()
 
-    def delete_event_data(self, name: str):
-        doc = self.db.Events.find_one_and_delete({"event_name": name})
+    def delete_event_data(self, _id: str):
+        doc = self.db.Events.find_one_and_delete({"_id": _id})
         if not doc:
-            raise errors.EventDoesNotError()
+            raise errors.EventDoesNotExistError()
 
     def insert_team_data(self, data: Dict[str, str]):
         doc = self.db.Team.find_one({"name": data["name"]})
         if doc:
             raise errors.MemberExistsError()
+        data["_id"] = self.get_uid()
         self.db.Team.insert_one(data)
 
     def update_team_data(self, data):
-        member_name = data.pop("name")
+        member_id = data.pop("id")
         _data = self.sanitize_data(data)
         doc = self.db.Team.find_one_and_update(
-            {"name": member_name}, update={"$set": _data}
+            {"_id": member_id}, update={"$set": _data}
         )
         if not doc:
             raise errors.MemberDoesNotExistError()
 
-    def delete_team_data(self, name: str):
-        doc = self.db.Team.find_one_and_delete({"name": name})
+    def delete_team_data(self, _id: str):
+        doc = self.db.Team.find_one_and_delete({"_id": _id})
         if not doc:
             raise errors.MemberDoesNotExistError()

@@ -42,6 +42,10 @@ class TestTeamPage(CustomTestClass):
 
         response = self.client.get(self.base_url + "/api/team", params={"page": 1})
         self.assertEqual(response.json(), [data])
+        response = self.client.get(
+            self.base_url + "/api/admin/team", params={"page": 1}
+        )
+        self.assertEqual(response.status_code, 403)
 
         update_data = {
             "name": "TestUser",
@@ -63,10 +67,21 @@ class TestTeamPage(CustomTestClass):
             data=json.dumps(update_data),
             headers=headers,
         )
+        self.assertEqual(response.status_code, 400)
+
+        update_data["id"] = self.client.get(
+            self.base_url + "/api/admin/team", params={"page": 1}, headers=headers
+        ).json()[0]["_id"]
+        response = self.client.put(
+            self.base_url + "/api/admin/update-team",
+            data=json.dumps(update_data),
+            headers=headers,
+        )
         self.assertEqual(response.status_code, 200)
 
         updated_data = data.copy()
         updated_data.update(update_data)
+        updated_data.pop("id")
 
         response = self.client.get(self.base_url + "/api/team", params={"page": 1})
         self.assertEqual(response.json(), [updated_data])

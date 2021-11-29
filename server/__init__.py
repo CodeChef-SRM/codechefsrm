@@ -28,6 +28,7 @@ application = FastAPI(
     redoc_url="/redoc",
 )
 
+application.middleware("http")(verify_user)
 application.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -35,8 +36,6 @@ application.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-application.middleware("http")(verify_user)
 
 application.state.limiter = limiter
 application.exception_handler(RequestValidationError)(invalid_data_handler)
@@ -50,3 +49,8 @@ application.include_router(admin_router, prefix="/api/admin")
 async def health_check():
     uptime = await process_time()
     return {"upTime": uptime}
+
+
+@application.get("/me", status_code=200)
+async def verify_token():
+    return {"success": True}
