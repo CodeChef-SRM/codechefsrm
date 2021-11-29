@@ -6,7 +6,7 @@ import AlertContext from '../../context/AlertContext/AlertContext';
 
 const Adminsignup = () => {
 
-    const url = 'https://4db7-103-121-204-224.ngrok.io'
+    const url = 'https://codechefsrm.herokuapp.com'
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');

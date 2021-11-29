@@ -5,7 +5,7 @@ import EventContext from './EventsContext';
 
 const EventsState = (props) => {
 
-    const url = 'https://4db7-103-121-204-224.ngrok.io'
+    const url = 'https://codechefsrm.herokuapp.com'
 
     const [events, setEvents] = useState([]);
 

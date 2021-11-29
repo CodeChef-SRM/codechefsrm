@@ -6,7 +6,7 @@ import TeamMemberContext from './TeamMemberContext'
 
 const TeamMemberState = (props) => {
 
-    const url = 'https://4db7-103-121-204-224.ngrok.io'
+    const url = 'https://codechefsrm.herokuapp.com'
 
     const [team, setTeam] = useState([])
 
