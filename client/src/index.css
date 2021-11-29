@@ -1,4 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 * {
   margin: 0;
   padding: 0;
+  font-family: "Inter", sans-serif;
+}
+.flex__center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex__flow__down {
+  flex-direction: column;
+}
+.flex__space__between {
+  justify-content: space-between;
+}
+.flex__left {
+  align-items: flex-start;
 }

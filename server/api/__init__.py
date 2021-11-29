@@ -1,3 +1,4 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+open_router = APIRouter()
+admin_router = APIRouter()
