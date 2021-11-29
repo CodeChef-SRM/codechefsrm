@@ -1,7 +1,5 @@
 from .base import CustomTestClass
 
-import json
-
 
 class TestAccessRefresh(CustomTestClass):
     def test_me(self):
