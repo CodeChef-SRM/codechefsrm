@@ -85,3 +85,17 @@ class TestTeamPage(CustomTestClass):
 
         response = self.client.get(self.base_url + "/api/team", params={"page": 1})
         self.assertEqual(response.json(), [updated_data])
+
+        response = self.client.delete(
+            self.base_url + "/api/admin/delete-team",
+            data=json.dumps({"id": update_data["id"]}),
+            headers={},
+        )
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.delete(
+            self.base_url + "/api/admin/delete-team",
+            data=json.dumps({"id": update_data["id"]}),
+            headers=headers,
+        )
+        self.assertEqual(response.status_code, 200)

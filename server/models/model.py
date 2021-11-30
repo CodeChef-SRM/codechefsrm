@@ -95,11 +95,13 @@ class Model:
         )
         if not doc:
             raise errors.EventDoesNotExistError()
+        return doc["event_name"]
 
     def delete_event_data(self, _id: str):
         doc = self.db.Events.find_one_and_delete({"_id": _id})
         if not doc:
             raise errors.EventDoesNotExistError()
+        return doc["event_name"]
 
     def insert_team_data(self, data: Dict[str, str]):
         doc = self.db.Team.find_one({"name": data["name"]})
@@ -116,8 +118,10 @@ class Model:
         )
         if not doc:
             raise errors.MemberDoesNotExistError()
+        return doc["name"]
 
     def delete_team_data(self, _id: str):
         doc = self.db.Team.find_one_and_delete({"_id": _id})
         if not doc:
             raise errors.MemberDoesNotExistError()
+        return doc["name"]
