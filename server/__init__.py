@@ -1,19 +1,19 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from server.api.view import open_router, admin_router
+
 from server.api.exception_handlers import (
-    invalid_data_handler,
     auth_error_handler,
     data_error_handler,
+    invalid_data_handler,
 )
 from server.api.limiter import limiter
 from server.api.utils import process_time
+from server.api.view import admin_router, open_router
+from server.authentication.middleware import verify_user
 from server.errors.auth_errors import AuthenticationError
 from server.errors.data_error import DataErrors
-from server.authentication.middleware import verify_user
-from dotenv import load_dotenv
-
 
 __version__ = "0.1.0"
 __title__ = "CodeChef SRM Student Chapter"
