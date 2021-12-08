@@ -1,13 +1,17 @@
 import React from 'react'
+import Domains from '../Domains/Domains'
 import Navbar from '../Navbar/Navbar'
 import './Homepage.css'
 
 const Homepage = () => {
     return (
-        <div className="home__main">
-            <Navbar />
-            <Hero />
-        </div>
+        <>
+            <div className="home__main">
+                <Navbar />
+                <Hero />
+            </div>
+            <Domains />
+        </>
     )
 }
 
