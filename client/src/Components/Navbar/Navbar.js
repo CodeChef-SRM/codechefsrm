@@ -11,7 +11,7 @@ const Navbar = () => {
                 <Link style={{ textDecoration: "none" }} to="/" className="nav__link">
                     About
                 </Link>
-                <Link style={{ textDecoration: "none" }} to="/" className="nav__link">
+                <Link style={{ textDecoration: "none" }} to="/events" className="nav__link">
                     Events
                 </Link>
                 <Link to="/">
@@ -34,7 +34,7 @@ const Navbar = () => {
                 <Link style={{ textDecoration: "none" }} to="/" className="nav__link__m">
                     About
                 </Link>
-                <Link style={{ textDecoration: "none" }} to="/" className="nav__link__m">
+                <Link style={{ textDecoration: "none" }} to="/events" className="nav__link__m">
                     Events
                 </Link>
                 <Link style={{ textDecoration: "none" }} to="/" className="nav__link__m">

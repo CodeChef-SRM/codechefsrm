@@ -50,7 +50,8 @@ const AdminNavbar = ({ handleAlert }) => {
     const history = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('ccscadminaccesstoken');
+        localStorage.removeItem('ccscadminaccesstokenadmin');
+        localStorage.removeItem('ccscadminaccesstokenrefresh');
         history('/admin');
         handleAlert('Log Out Successful !!', 'success')
     }

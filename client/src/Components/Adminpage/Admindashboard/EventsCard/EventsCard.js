@@ -10,9 +10,7 @@ const EventsCard = ({ event }) => {
     const [eventPosterLink, setEventPosterLink] = useState(event.image_url);
     const [info, setInfo] = useState(event.event_info);
     const [startDate, setStartDate] = useState(event.event_start_date);
-    const [startTime, setStartTime] = useState(event.startTime);
     const [endDate, setEndDate] = useState(event.event_end_date);
-    const [endTime, setEndTime] = useState(event.endTime);
     const [resgisterLink, setRegisterLink] = useState(event.registration_url);
     const [popup, setPopup] = useState(false);
 
@@ -29,8 +27,8 @@ const EventsCard = ({ event }) => {
             <div className="event__card__footer flex__center flex__flow__down">
                 <h2>{name}</h2>
                 <p>{info}</p>
-                <p className="date__event">{startDate} &#8226; {startTime}</p>
-                <p className="date__event">{endDate} &#8226; {endTime}</p>
+                <p className="date__event">{startDate}</p>
+                <p className="date__event">{endDate}</p>
                 <a href={resgisterLink}>
                     <button className="register__button">Register</button>
                 </a>
@@ -41,20 +39,18 @@ const EventsCard = ({ event }) => {
             </div>
             {
                 (popup) ?
-                    <EventEditPopUp name={name} eventPosterLink={eventPosterLink} info={info} startDate={startDate} startTime={startTime} endDate={endDate} endTime={endTime} resgisterLink={resgisterLink} setName={setName} setEventPosterLink={setEventPosterLink} setInfo={setInfo} setStartDate={setStartDate} setStartTime={setStartTime} setEndDate={setEndDate} setEndTime={setEndTime} setRegisterLink={setRegisterLink} setPopup={setPopup} editEvent={editEvent} id={event._id} /> : ''
+                    <EventEditPopUp name={name} eventPosterLink={eventPosterLink} info={info} startDate={startDate} endDate={endDate} resgisterLink={resgisterLink} setName={setName} setEventPosterLink={setEventPosterLink} setInfo={setInfo} setStartDate={setStartDate} setEndDate={setEndDate} setRegisterLink={setRegisterLink} setPopup={setPopup} editEvent={editEvent} id={event._id} /> : ''
             }
         </div>
     )
 }
 
-const EventEditPopUp = ({ name, eventPosterLink, info, startDate, startTime, endDate, endTime, resgisterLink, setName, setEventPosterLink, setInfo, setStartDate, setStartTime, setEndDate, setEndTime, setRegisterLink, setPopup, editEvent, id }) => {
+const EventEditPopUp = ({ name, eventPosterLink, info, startDate, endDate, resgisterLink, setName, setEventPosterLink, setInfo, setStartDate, setEndDate, setRegisterLink, setPopup, editEvent, id }) => {
     const [inputName, setInputName] = useState(name);
     const [inputPosterLink, setInputPosterLink] = useState(eventPosterLink);
     const [inputInfo, setInputInfo] = useState(info);
     const [inputStartDate, setInputStartDate] = useState(startDate);
-    const [inputStartTime, setInputStartTime] = useState(startTime);
     const [inputEndDate, setInputEndDate] = useState(endDate);
-    const [inputEndTime, setInputEndTime] = useState(endTime);
     const [inputRegisterLink, setInputRegisterLink] = useState(resgisterLink);
 
     const handleSubmit = (e) => {
@@ -63,12 +59,10 @@ const EventEditPopUp = ({ name, eventPosterLink, info, startDate, startTime, end
         setEventPosterLink(inputPosterLink);
         setInfo(inputInfo);
         setStartDate(inputStartDate);
-        setStartTime(inputStartTime);
         setEndDate(inputEndDate);
-        setEndTime(inputEndTime);
         setRegisterLink(inputRegisterLink);
         //id, name, info, startDate, startTime, endDate, endTime, registerLink, poster
-        editEvent(id, inputName, inputInfo, inputStartDate, startTime, inputEndDate, endTime, inputRegisterLink, inputPosterLink)
+        editEvent(id, inputName, inputInfo, inputStartDate, inputEndDate, inputRegisterLink, inputPosterLink)
         setPopup(false);
     }
 
@@ -86,12 +80,8 @@ const EventEditPopUp = ({ name, eventPosterLink, info, startDate, startTime, end
                 <textarea type='text' value={inputInfo} onChange={(e) => setInputInfo(e.target.value)} placeholder="Enter the Event Info" className='form__input'></textarea>
                 <p>Event Start Date</p>
                 <input type='text' value={inputStartDate} onChange={(e) => setInputStartDate(e.target.value)} placeholder="Enter the Event Start Date (dd/mm/yyyy)" className='form__input'></input>
-                <p>Event Start Time</p>
-                <input type='text' value={inputStartTime} onChange={(e) => setInputStartTime(e.target.value)} placeholder="Enter the Event Start Time (hh:mm AM/PM)" className='form__input'></input>
                 <p>Event End Date</p>
                 <input type='text' value={inputEndDate} onChange={(e) => setInputEndDate(e.target.value)} placeholder="Enter the Event End Date (dd/mm/yyyy)" className='form__input'></input>
-                <p>Event End Time</p>
-                <input type='text' value={inputEndTime} onChange={(e) => setInputEndTime(e.target.value)} placeholder="Enter the Event End Time (hh:mm AM/PM)" className='form__input'></input>
                 <p>Event Registration Link</p>
                 <input type='text' value={inputRegisterLink} onChange={(e) => setInputRegisterLink(e.target.value)} placeholder="Enter the Event Registration Link" className='form__input'></input>
                 <button type='submit' className='register__button' style={{ filter: 'invert(1)' }}>Save Changes</button>
