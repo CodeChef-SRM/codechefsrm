@@ -37,7 +37,7 @@ async def insert_admin(data: definitions.BaseSchema):
 async def verify_admin(email: str, password: str):
     admin = model.admin_from_email(email=email)
     if admin["password"] == sha256(password.encode()).hexdigest():
-        return True
+        return admin["name"]
     return False
 
 
@@ -48,12 +48,12 @@ async def insert_event(data: definitions.BaseSchema):
 
 async def update_event(data: definitions.BaseSchema):
     data = dict(data)
-    model.update_event_data(data=data)
+    return model.update_event_data(data=data)
 
 
 async def delete_event(data: definitions.BaseSchema):
     _id = data.id
-    model.delete_event_data(_id=_id)
+    return model.delete_event_data(_id=_id)
 
 
 async def insert_team(data: definitions.BaseSchema):
@@ -63,9 +63,9 @@ async def insert_team(data: definitions.BaseSchema):
 
 async def update_team(data: definitions.BaseSchema):
     data = dict(data)
-    model.update_team_data(data)
+    return model.update_team_data(data)
 
 
 async def delete_team(data: definitions.BaseSchema):
     _id = data.id
-    model.delete_team_data(_id=_id)
+    return model.delete_team_data(_id=_id)
