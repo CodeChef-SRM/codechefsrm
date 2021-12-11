@@ -4,8 +4,7 @@ from .errors import InvalidCredentials, InvalidWebhookError
 from server.models import transactions
 from starlette.requests import Request
 
-from . import open_router, admin_router
-from . import definitions
+from . import definitions, open_router, admin_router, admin_logger
 from .utils import throttle_wrapper
 from server.authentication.utils import generate_token, refresh_to_access
 
@@ -42,14 +41,18 @@ async def admin_register(request: Request, data: definitions.AdminRegisterSchema
     if data.web_hook != web_hook:
         raise InvalidWebhookError()
     await transactions.insert_admin(data=data)
+    admin_logger.warning(f"Admin Registered {data.name, data.email}")
     return {"success": True}
 
 
 @throttle_wrapper(path="/login", router=admin_router, status_code=200)
 async def admin_login(request: Request, data: definitions.AdminLoginSchema):
-    if await transactions.verify_admin(email=data.email, password=data.password):
+    if name := await transactions.verify_admin(
+        email=data.email, password=data.password
+    ):
         return generate_token(
-            payload={"user": data.email, "admin": True}, get_refresh=True
+            payload={"user_name": name, "user_email": data.email, "admin": True},
+            get_refresh=True,
         )
     raise InvalidCredentials()
 
@@ -67,6 +70,9 @@ async def admin_events(page):
 @throttle_wrapper(path="/add-event", router=admin_router, status_code=201)
 async def add_event(request: Request, data: definitions.EventSchema):
     await transactions.insert_event(data=data)
+    admin_logger.warning(
+        f"{request.state.user['user_name']} Added new event: {data.event_name}"
+    )
     return {"success": True}
 
 
@@ -74,7 +80,10 @@ async def add_event(request: Request, data: definitions.EventSchema):
     path="/update-event", router=admin_router, method="put", status_code=200
 )
 async def update_event(request: Request, data: definitions.ModifyEventSchema):
-    await transactions.update_event(data=data)
+    event_name = await transactions.update_event(data=data)
+    admin_logger.warning(
+        f"{request.state.user['user_name']} Updated Event: {event_name}"
+    )
     return {"success": True}
 
 
@@ -82,13 +91,17 @@ async def update_event(request: Request, data: definitions.ModifyEventSchema):
     path="/delete-event", router=admin_router, method="delete", status_code=200
 )
 async def delete_event(request: Request, data: definitions.ModifyEventSchema):
-    await transactions.delete_event(data=data)
+    event_name = await transactions.delete_event(data=data)
+    admin_logger.critical(
+        f"{request.state.user['user_name']} Deleted Event: {event_name}"
+    )
     return {"success": True}
 
 
 @throttle_wrapper(path="/add-team", router=admin_router, method="post", status_code=201)
 async def add_team(request: Request, data: definitions.TeamSchema):
     await transactions.insert_team(data)
+    admin_logger.warning(f"{request.state.user['user_name']} Added Member: {data.name}")
     return {"success": True}
 
 
@@ -96,7 +109,10 @@ async def add_team(request: Request, data: definitions.TeamSchema):
     path="/update-team", router=admin_router, method="put", status_code=200
 )
 async def update_team(request: Request, data: definitions.ModifyTeamSchema):
-    await transactions.update_team(data=data)
+    member = await transactions.update_team(data=data)
+    admin_logger.warning(
+        f"{request.state.user['user_name']} Updated member details: {member}"
+    )
     return {"success": True}
 
 
@@ -104,10 +120,11 @@ async def update_team(request: Request, data: definitions.ModifyTeamSchema):
     path="/delete-team", router=admin_router, method="delete", status_code=200
 )
 async def delete_team(request: Request, data: definitions.ModifyTeamSchema):
-    await transactions.delete_team(data)
+    member = await transactions.delete_team(data)
+    admin_logger.critical(f"{request.state.user['user_name']} Deleted Member: {member}")
     return {"success": True}
 
 
 @admin_router.get("/refresh-token", status_code=200)
 async def refresh_token(request: Request):
-    return await refresh_to_access(request.state.user)
+    return await refresh_to_access(request.state.user["token"])

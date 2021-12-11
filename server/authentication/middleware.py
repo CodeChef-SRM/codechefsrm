@@ -22,6 +22,6 @@ async def verify_user(request: Request, call_next: Callable):
         value = tokens.verify_key(token)
         if isinstance(value, str):
             return Response(str(value), status_code=403)
-        request.state.user = token
+        request.state.user = {"token": token, **value}
 
     return await call_next(request)
