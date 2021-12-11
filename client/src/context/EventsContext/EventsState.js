@@ -62,7 +62,7 @@ const EventsState = (props) => {
         setEvents(json);
     }
 
-    const addEvent = async (name, poster, info, startDate, startTime, endDate, endTime, registerLink) => {
+    const addEvent = async (name, poster, info, startDate, endDate, registerLink) => {
 
         meRequest();
 
@@ -71,9 +71,7 @@ const EventsState = (props) => {
             poster: poster,
             info: info,
             startDate: startDate,
-            startTime: startTime,
             endDate: endDate,
-            endTime: endTime,
             registerLink: registerLink
         }
         setEvents(events.concat(Event_json))
