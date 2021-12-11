@@ -16,10 +16,12 @@ const EventsPage = () => {
 const EventsSection = () => {
     const [events, setEvents] = useState([]);
     const [page, setPage] = useState(1);
+    const [loader, setLoader] = useState(false);
 
     const url = 'https://codechefsrm.herokuapp.com'
 
     const getEventsData = async (id) => {
+        setLoader(true);
         const response = await fetch(`${url}/api/events?page=${id}`, {
             method: 'GET',
             headers: {
@@ -28,6 +30,7 @@ const EventsSection = () => {
         })
         const json = await response.json();
         console.log(json);
+        setLoader(false);
         setEvents(json);
     }
 
@@ -41,27 +44,31 @@ const EventsSection = () => {
             <div className="underline"></div>
             <div className="events__section__card">
                 {
-                    (events.length !== 0) ?
-                        events.map((event) => {
-                            return (
-                                <div className='event__card' key={event.event_name} style={{ background: `url(${event.image_url})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
-                                    <h1 className='event__card__heading'>{event.event_name}</h1>
-                                    <div className='event__card__overlay flex__center flex__flow__down'>
-                                        <div>
-                                            <h2>{event.event_name}</h2>
-                                            <p>{event.event_info}</p>
-                                        </div>
-                                        <div className='date__section'>
-                                            <p>{event.event_start_date}</p>
-                                            <p>{event.event_end_date}</p>
-                                            <a href={event.registration_url}>
-                                                <button>Register</button>
-                                            </a>
+                    (loader) ? <div className='flex__center'>
+                        <div className='loader'>
+                        </div>
+                    </div> :
+                        (events.length !== 0) ?
+                            events.map((event) => {
+                                return (
+                                    <div className='event__card' key={event.event_name} style={{ background: `url(${event.image_url})`, backgroundPosition: 'center', backgroundSize: 'cover' }}>
+                                        <h1 className='event__card__heading'>{event.event_name}</h1>
+                                        <div className='event__card__overlay flex__center flex__flow__down'>
+                                            <div>
+                                                <h2>{event.event_name}</h2>
+                                                <p>{event.event_info}</p>
+                                            </div>
+                                            <div className='date__section'>
+                                                <p>{event.event_start_date}</p>
+                                                <p>{event.event_end_date}</p>
+                                                <a href={event.registration_url}>
+                                                    <button>Register</button>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        }) : <p>No Events here !!</p>
+                                )
+                            }) : <p>No Events here !!</p>
                 }
             </div>
             <div className="pagination flex__center">

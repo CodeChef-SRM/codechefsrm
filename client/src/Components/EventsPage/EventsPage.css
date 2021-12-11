@@ -94,3 +94,26 @@
     grid-template-columns: repeat(1, 0fr);
   }
 }
+
+.loader {
+  width: 50px;
+  height: 50px;
+  margin: 50px;
+  border: 5px solid #232b33;
+  border-bottom: 5px solid #00b4d8;
+  border-radius: 50%;
+  animation-name: rotate;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
