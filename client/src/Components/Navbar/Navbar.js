@@ -17,7 +17,7 @@ const Navbar = () => {
                 <Link to="/">
                     <img src={CCSCLogo} alt="ccsclogo" width="70"></img>
                 </Link>
-                <Link style={{ textDecoration: "none" }} to="/" className="nav__link">
+                <Link style={{ textDecoration: "none" }} to="/team" className="nav__link">
                     Team
                 </Link>
                 <Link style={{ textDecoration: "none" }} to="/" className="nav__link">
@@ -37,7 +37,7 @@ const Navbar = () => {
                 <Link style={{ textDecoration: "none" }} to="/events" className="nav__link__m">
                     Events
                 </Link>
-                <Link style={{ textDecoration: "none" }} to="/" className="nav__link__m">
+                <Link style={{ textDecoration: "none" }} to="/team" className="nav__link__m">
                     Team
                 </Link>
                 <Link style={{ textDecoration: "none" }} to="/" className="nav__link__m">

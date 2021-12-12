@@ -9,6 +9,7 @@ import EventsState from "./context/EventsContext/EventsState";
 import TeamMemberState from "./context/TeamMemberContext/TeamMemberState";
 import Alert from "./Components/Alert/Alert";
 import EventsPage from "./Components/EventsPage/EventsPage";
+import TeamPage from "./Components/TeamPage/TeamPage";
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
               <Route exact path="/signup" element={< Adminsignup />} />
               <Route exact path="/adminccsc" element={< Admindashboard />} />
               <Route exact path="/events" element={<EventsPage />}></Route>
+              <Route exact path="/team" element={<TeamPage />}></Route>
             </Routes>
           </Router>
         </EventsState>
