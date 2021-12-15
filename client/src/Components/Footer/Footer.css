@@ -1,0 +1,42 @@
+.footer__main {
+  background: #151a1f;
+  color: #fff;
+}
+.footer__left,
+.footer__right {
+  width: 40%;
+  padding: 5%;
+}
+.footer__bottom {
+  width: 95%;
+  padding: 2.5%;
+}
+.footer__right {
+  align-items: flex-end;
+}
+.socials svg {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+@media screen and (max-width: 550px) {
+  .footer__left p {
+    font-size: 12px;
+  }
+  .footer__bottom {
+    text-align: center;
+  }
+  .footer__bottom h2 {
+    font-size: 15px;
+  }
+  .footer__bottom p {
+    font-size: 13px;
+  }
+  .footer__top {
+    flex-direction: column;
+  }
+  .footer__left,
+  .footer__right {
+    width: 90%;
+    padding: 5%;
+  }
+}

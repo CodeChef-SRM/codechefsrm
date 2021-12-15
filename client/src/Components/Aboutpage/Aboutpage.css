@@ -1,0 +1,40 @@
+.main__abt__div {
+  width: 95%;
+  padding: 2.5%;
+}
+.about__main {
+  background: #151a1f;
+  min-height: 100vh;
+  color: #fff;
+}
+.left__abt__div,
+.right__abt__div {
+  width: 50%;
+}
+.right__abt__div img {
+  width: 90%;
+  padding: 5%;
+}
+@media screen and (max-width: 925px) {
+  .abt__section {
+    flex-direction: column;
+  }
+  .left__abt__div,
+  .right__abt__div {
+    width: 75%;
+  }
+}
+@media screen and (max-width: 425px) {
+  .main__abt__div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  .left__abt__div,
+  .right__abt__div {
+    width: 95%;
+    padding: 2.5%;
+  }
+}
