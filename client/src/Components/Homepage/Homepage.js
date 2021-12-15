@@ -1,5 +1,6 @@
 import React from 'react'
 import Domains from '../Domains/Domains'
+import Footer from '../Footer/Footer'
 import Navbar from '../Navbar/Navbar'
 import './Homepage.css'
 
@@ -11,6 +12,7 @@ const Homepage = () => {
                 <Hero />
             </div>
             <Domains />
+            <Footer />
         </>
     )
 }

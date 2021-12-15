@@ -16,6 +16,9 @@
 }
 
 @media screen and (max-width: 600px) {
+  .website__logo {
+    width: 50px;
+  }
   .nav__links {
     width: 95%;
     padding: 2.5%;
