@@ -62,6 +62,9 @@ class Model:
     def about_us(self):
         return self.db.AboutUs.find({}, {"_id": 0})
 
+    def add_about_us(self, data):
+        self.db.AboutUs.insert_one(data)
+
     def admin_register(self, data: Dict[str, str]):
         doc = self.db.Admin.find_one({"email": data["email"]})
         if doc:
