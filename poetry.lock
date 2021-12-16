@@ -1,6 +1,6 @@
 [[package]]
 name = "anyio"
-version = "3.3.4"
+version = "3.4.0"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
 category = "main"
 optional = false
@@ -12,7 +12,7 @@ sniffio = ">=1.1"
 
 [package.extras]
 doc = ["sphinx-rtd-theme", "sphinx-autodoc-typehints (>=1.2.0)"]
-test = ["coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "pytest (>=6.0)", "pytest-mock (>=3.6.1)", "trustme", "uvloop (<0.15)", "mock (>=4)", "uvloop (>=0.15)"]
+test = ["coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "pytest (>=6.0)", "pytest-mock (>=3.6.1)", "trustme", "contextlib2", "uvloop (<0.15)", "mock (>=4)", "uvloop (>=0.15)"]
 trio = ["trio (>=0.16)"]
 
 [[package]]
@@ -108,7 +108,7 @@ trio = ["trio (>=0.14.0)", "sniffio (>=1.1)"]
 
 [[package]]
 name = "fastapi"
-version = "0.70.0"
+version = "0.70.1"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 category = "main"
 optional = false
@@ -383,12 +383,12 @@ standard = ["websockets (>=9.1)", "httptools (>=0.2.0,<0.3.0)", "watchgod (>=0.6
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "816016a5f5ce03062a0aef9f67c6deb2afbc8d202e885503b2ad4f9978e8c11d"
+content-hash = "8c9eb16028940fa1bf5de4a15ca450272659fa8434eac3e09c6cb5b9cb52e384"
 
 [metadata.files]
 anyio = [
-    {file = "anyio-3.3.4-py3-none-any.whl", hash = "sha256:4fd09a25ab7fa01d34512b7249e366cd10358cdafc95022c7ff8c8f8a5026d66"},
-    {file = "anyio-3.3.4.tar.gz", hash = "sha256:67da67b5b21f96b9d3d65daa6ea99f5d5282cb09f50eb4456f8fb51dffefc3ff"},
+    {file = "anyio-3.4.0-py3-none-any.whl", hash = "sha256:2855a9423524abcdd652d942f8932fda1735210f77a6b392eafd9ff34d3fe020"},
+    {file = "anyio-3.4.0.tar.gz", hash = "sha256:24adc69309fb5779bc1e06158e143e0b6d2c56b302a3ac3de3083c705a6ed39d"},
 ]
 asgiref = [
     {file = "asgiref-3.4.1-py3-none-any.whl", hash = "sha256:ffc141aa908e6f175673e7b1b3b7af4fdb0ecb738fc5c8b88f69f055c2415214"},
@@ -419,8 +419,8 @@ dnspython = [
     {file = "dnspython-2.1.0.zip", hash = "sha256:e4a87f0b573201a0f3727fa18a516b055fd1107e0e5477cded4a2de497df1dd4"},
 ]
 fastapi = [
-    {file = "fastapi-0.70.0-py3-none-any.whl", hash = "sha256:a36d5f2fad931aa3575c07a3472c784e81f3e664e3bb5c8b9c88d0ec1104f59c"},
-    {file = "fastapi-0.70.0.tar.gz", hash = "sha256:66da43cfe5185ea1df99552acffd201f1832c6b364e0f4136c0a99f933466ced"},
+    {file = "fastapi-0.70.1-py3-none-any.whl", hash = "sha256:5367226c7bcd7bfb2e17edaf225fd9a983095b1372281e9a3eb661336fb93748"},
+    {file = "fastapi-0.70.1.tar.gz", hash = "sha256:21d03979b5336375c66fa5d1f3126c6beca650d5d2166fbb78345a30d33c8d06"},
 ]
 h11 = [
     {file = "h11-0.12.0-py3-none-any.whl", hash = "sha256:36a3cb8c0a032f56e2da7084577878a035d3b61d104230d4bd49c0c6b555a9c6"},
