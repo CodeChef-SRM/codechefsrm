@@ -63,6 +63,7 @@ class Model:
         return self.db.AboutUs.find({}, {"_id": 0})
 
     def add_about_us(self, data):
+        self.db.drop_collection("AboutUs")
         self.db.AboutUs.insert_one(data)
 
     def admin_register(self, data: Dict[str, str]):
