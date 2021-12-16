@@ -69,3 +69,8 @@ async def update_team(data: definitions.BaseSchema):
 async def delete_team(data: definitions.BaseSchema):
     _id = data.id
     return model.delete_team_data(_id=_id)
+
+
+async def insert_about_us(data: definitions.BaseSchema):
+    data = data.about_us
+    return model.add_about_us(data=data)
