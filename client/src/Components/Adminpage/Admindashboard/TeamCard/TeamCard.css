@@ -1,5 +1,6 @@
 .member__card {
   max-width: 330px;
+  min-width: 330px;
   height: 430px;
   padding: 10px;
   width: 100%;
