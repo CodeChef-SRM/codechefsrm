@@ -70,7 +70,8 @@ async def admin_events(page):
 @throttle_wrapper(path="/about-us", router=admin_router, status_code=201)
 async def admin_about_us(request: Request, data: definitions.AboutUsSchema):
     admin_logger.warning(f"{request.state.user['user_name']} Updated About Us: {data}")
-    return await transactions.insert_about_us(data=data)
+    await transactions.insert_about_us(data=data)
+    return {"success": True}
 
 
 @throttle_wrapper(path="/add-event", router=admin_router, status_code=201)
