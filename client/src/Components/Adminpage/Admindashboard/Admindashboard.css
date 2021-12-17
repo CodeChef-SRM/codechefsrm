@@ -101,3 +101,29 @@
 .Pagination__Toggle > button:hover {
   background: #cacaca;
 }
+/*About Us Section*/
+.edit__about__main {
+  display: flex;
+  width: 95%;
+  padding: 2.5%;
+  height: auto;
+}
+.textareas {
+  display: flex;
+  width: 95%;
+  padding: 2.5%;
+}
+.textareas textarea {
+  width: 95%;
+  padding: 2.5%;
+  height: 200px;
+  margin: 10px;
+  background: #f1f1f1;
+  border: none;
+  border-bottom: 2px solid #f1f1f1;
+  transition: all 0.3s ease;
+}
+.textareas textarea:focus {
+  border-bottom: 2px solid #000;
+  outline: none;
+}

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link as NavLink } from 'react-scroll';
-import { useState } from 'react/cjs/react.development';
 import CCSCLogo from '../../../Assets/BlueWithBrackets.png'
 import EventsContext from '../../../context/EventsContext/EventsContext';
 import TeamMemberContext from '../../../context/TeamMemberContext/TeamMemberContext';
@@ -10,6 +9,7 @@ import TeamCard from './TeamCard/TeamCard';
 
 import { useNavigate } from 'react-router-dom';
 import AlertContext from '../../../context/AlertContext/AlertContext';
+import AboutContext from '../../../context/AboutContext/AboutContext';
 
 const Admindashboard = () => {
     const EventContext = useContext(EventsContext);
@@ -21,6 +21,9 @@ const Admindashboard = () => {
     const alertContext = useContext(AlertContext);
     const { handleAlert } = alertContext;
 
+    const aboutContext = useContext(AboutContext);
+    const { getAbout, editAboutText, about } = aboutContext;
+
     const [eventPageNumber, setEventPageNumber] = useState(1);
     const [teamPageNumber, setTeamPageNumber] = useState(1);
 
@@ -30,6 +33,7 @@ const Admindashboard = () => {
         if (localStorage.getItem('ccscadminaccesstokenadmin') !== "null") {
             getEvents(eventPageNumber);
             getTeam(teamPageNumber);
+            getAbout();
         } else {
             history('/admin')
         }
@@ -40,6 +44,7 @@ const Admindashboard = () => {
             <AdminNavbar handleAlert={handleAlert} />
             <EventsSection events={events} addEvent={addEvent} eventPageNumber={eventPageNumber} setEventPageNumber={setEventPageNumber} />
             <TeamSection team={team} addTeamMember={addTeamMember} teamPageNumber={teamPageNumber} setTeamPageNumber={setTeamPageNumber} />
+            <EditAbout editAboutText={editAboutText} getAbout={getAbout} about={about} />
         </>
     )
 }
@@ -65,6 +70,9 @@ const AdminNavbar = ({ handleAlert }) => {
                 </NavLink>
                 <NavLink to="team" smooth={true} className="link">
                     TEAM
+                </NavLink>
+                <NavLink to="about" smooth={true} className="link">
+                    ABOUT
                 </NavLink>
             </div>
             <div className="flex__center">
@@ -176,7 +184,7 @@ const TeamSection = ({ team, addTeamMember, teamPageNumber, setTeamPageNumber })
                 {
                     (team.length !== 0) ?
                         team.map((member) => {
-                            console.log('updating...');
+                            // console.log('updating...');
                             return <TeamCard member={member} key={member._id} />
                         }) : <p>No members here !! Please Add someone</p>
                 }
@@ -217,6 +225,43 @@ const AddTeamMemberModal = ({ addTeamMember, addMemberModal, setAddMemberModal }
                 <button className="prim__button" type='submit'>Submit</button>
             </form>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25px" height="25px" className="close__button" onClick={() => setAddMemberModal(false)} fill='#000'><g data-name="Layer 2"><g data-name="plus"><rect width="24" height="24" opacity="0" transform="rotate(180 12 12)" /><path d="M19 11h-6V5a1 1 0 0 0-2 0v6H5a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2z" /></g></g></svg>
+        </div>
+    )
+}
+
+const EditAbout = ({ about, editAboutText, getAbout }) => {
+
+    const [para1, setPara1] = useState('');
+    const [para2, setPara2] = useState('');
+    const [para3, setPara3] = useState('');
+
+
+    const [data, setData] = useState(about);
+
+    const handleSubmit = () => {
+        editAboutText(para1, para2, para3);
+        console.log(data);
+        setData([{ para1, para2, para3 }]);
+    }
+
+    useEffect(() => {
+        setData(about);
+        console.log(data);
+        setPara1(data[0].para1);
+        setPara2(data[0].para2);
+        setPara3(data[0].para3);
+        // eslint-disable-next-line
+    }, [about])
+
+    return (
+        <div className='edit__about__main flex__center flex__flow__down' id='about'>
+            <h1>About Us Section</h1>
+            <div className='textareas flex__center flex__flow__down'>
+                <textarea value={para1} onChange={(e) => setPara1(e.target.value)}></textarea>
+                <textarea value={para2} onChange={(e) => setPara2(e.target.value)}></textarea>
+                <textarea value={para3} onChange={(e) => setPara3(e.target.value)}></textarea>
+            </div>
+            <button onClick={() => handleSubmit()} className='prim__button'>Submit</button>
         </div>
     )
 }

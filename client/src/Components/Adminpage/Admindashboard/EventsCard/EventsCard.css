@@ -1,6 +1,7 @@
 .events__card__main {
   width: 100%;
   max-width: 330px;
+  min-width: 330px;
   height: 430px;
   padding: 10px;
   position: relative;
